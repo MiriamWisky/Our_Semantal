@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br><br>
+    <button type="submit">Login</button>
+  </form>
+  <button id="registerButton">Go to Registration</button>
+  <script src="index.js" defer></script>
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      console.log('Login form submitted'); 
+      const formData = new FormData(loginForm);
+      const email = formData.get('email');
+      const password = formData.get('password');
+      await login(email, password);
+    });
+
+    const registerButton = document.getElementById('registerButton');
+    registerButton.addEventListener('click', () => {
+      window.location.href = 'register.html';
+    });
+  </script>
+</body>
+</html>

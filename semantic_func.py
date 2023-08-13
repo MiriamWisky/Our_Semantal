@@ -1,4 +1,3 @@
-# import spacy
 
 # # Load a pre-trained word embedding model
 # nlp = spacy.load("en_core_web_md")
