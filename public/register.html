@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+</head>
+<body>
+  <h1>Register</h1>
+  <form id="registerForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br><br>
+    <button type="submit">Register</button>
+  </form>
+  <script src="index.js" defer></script>
+  <script>
+    const registerForm = document.getElementById('registerForm');
+    registerForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      console.log('register form submitted'); 
+      const formData = new FormData(registerForm);
+      const email = formData.get('email');
+      const password = formData.get('password');
+      await register(email, password);
+    });
+  </script>
+</body>
+</html>
