@@ -22,7 +22,9 @@
     "firebase-admin": "^11.10.1",
     "hbs": "^4.2.0",
     "mongoose": "^7.4.3",
+    "node-schedule": "^2.1.1",
     "nodeman": "^1.1.2",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "random-words": "^2.0.0"
   }
 }

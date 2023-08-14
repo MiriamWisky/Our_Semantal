@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const admin = require('firebase-admin');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const randomWords = require('random-words');
+const schedule = require('node-schedule');
 
 const app = express();
 
@@ -19,6 +21,19 @@ app.use(express.static('public'));
 const port = 8080;
 
 const userWins = {}; // Global object to store user wins
+
+
+// Schedule task to run at 00:00:00 every day
+const dailyJob = schedule.scheduleJob('0 0 * * *', async () => {
+  try {
+    const randomWord = randomWords();
+    const wordRef = admin.firestore().collection('Word').doc();
+    await wordRef.set({ word: randomWord });
+    console.log('Generated and saved word:', randomWord);
+  } catch (error) {
+    console.error('Error generating and saving word:', error);
+  }
+});
 
 // Define routes
 app.post('/register', async (req, res) => {
