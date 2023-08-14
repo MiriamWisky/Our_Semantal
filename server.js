@@ -55,7 +55,7 @@ app.post('/register', async (req, res) => {
       wins: 0,
       passwordHash: hashedPassword,
     });
-    userWins[userRecord.uid] = 0;
+    // userWins[userRecord.uid] = 0;
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error('Error creating user:', error);
