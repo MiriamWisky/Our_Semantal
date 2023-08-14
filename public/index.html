@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script src="index.js" defer></script>
   <title>Login</title>
 </head>
 <body>
@@ -13,7 +16,7 @@
     <button type="submit">Login</button>
   </form>
   <button id="registerButton">Go to Registration</button>
-  <script src="index.js" defer></script>
+ 
   <script>
     const loginForm = document.getElementById('loginForm');
     loginForm.addEventListener('submit', async (event) => {
