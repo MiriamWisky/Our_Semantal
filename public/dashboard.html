@@ -1,1 +1,28 @@
-<h1>Hello World!!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="design.css">
+    <script src="game.js" defer></script>
+    
+    <title>SEMANTLE Game</title>
+</head>
+<body onload="init()">
+    <h1>SEMANTLE</h1>
+    <input type="text" id="wordInput" placeholder="Enter a word">
+    <button id="addButton">Guess</button>
+    <table id="wordTable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Guess</th>
+                <th>Similarity</th>
+            </tr>
+        </thead>
+        <tbody id="wordList">
+        </tbody>
+    </table>
+    
+</body>
+</html>
