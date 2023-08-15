@@ -73,7 +73,7 @@ def semantic_similarity(word1, word2):
     return  normalized_similarity
 
 # Example usage
-word1 = "welcome"
-word2 = "hello"
-similarity = semantic_similarity(word1, word2)
-print(f"Semantic similarity between '{word1}' and '{word2}': {similarity:.4f}")
+# word1 = "welcome"
+# word2 = "hello"
+# similarity = semantic_similarity(word1, word2)
+# print(f"Semantic similarity between '{word1}' and '{word2}': {similarity:.4f}")
