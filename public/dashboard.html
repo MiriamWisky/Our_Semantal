@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,10 +8,12 @@
 
     <script src="game.js" defer></script>
     
+    
     <title>SEMANTLE Game</title>
 </head>
 <body onload="init()">
     <h1>SEMANTLE</h1>
+    <p id="yesterday_word"> </p>
     <input type="text" id="wordInput" placeholder="Enter a word">
     <button id="addButton">Guess</button>
     <table id="wordTable">
@@ -26,5 +28,47 @@
         </tbody>
     </table>
     
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="design.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="game.js" defer></script>
+    <title>SEMANTLE Game</title>
+</head>
+<body onload="init()">
+    <div class="container">
+        <h1 class="title">SEMANTLE</h1>
+
+        <button id="statsButton" class="stats-button">Statistics</button>
+        
+        <div id="statsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <pre id="statsContent"></pre>
+            </div>
+        </div>
+        
+        <p id="yesterday_word" class="yesterday-word"></p>
+        <div class="input-container">
+            <input type="text" id="wordInput" class="input-field" placeholder="Enter a word">
+            <button id="addButton" class="add-button">Guess</button>
+        </div>
+        <table class="word-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Guess</th>
+                    <th>Similarity</th>
+                </tr>
+            </thead>
+            <tbody id="wordList" class="word-list">
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

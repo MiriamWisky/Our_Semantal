@@ -57,6 +57,8 @@ def semantic_similarity(word1, word2):
     # Ensure input words are lowercase
     word1 = word1.lower()
     word2 = word2.lower()
+    if(word1==word2):
+        return 1
 
     # Get the word vectors
     vec1 = nlp(word1).vector

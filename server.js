@@ -11,6 +11,7 @@ var checkWord=require('check-if-word') ;
 const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 const { exec } = require('child_process');
 const { calculateSemanticSimilarity } = require('./semantic_similarity');
+// import {generate , count} from "random-words";
 
 const app = express();
 
@@ -46,24 +47,40 @@ admin.initializeApp({
 
 
 const userWins = {}; // Global object to store user wins
+// var randomGeneratedWord= randomWord();
+
 
 
 const scheduleRule = new schedule.RecurrenceRule();
-scheduleRule.hour = 0;
-scheduleRule.minute = 0;
+scheduleRule.hour = 10;
+scheduleRule.minute = 58;
 scheduleRule.second = 0;
+var yesterday_word="flower";
+// const dailyWordJob = schedule.scheduleJob(scheduleRule, async () => {
+//   yesterday_word=randomGeneratedWord;
+//   try {
+//      randomGeneratedWord = randomWords();
+//     console.log(randomGeneratedWord);
+// //     const wordRef = admin.firestore().collection('Word').doc();
+// //     await wordRef.set({ word: randomGeneratedWord });
+//     console.log('Generated and saved daily word:', randomGeneratedWord);
+//   } catch (error) {
+//     console.error('Error generating and saving daily word:', error);
+//   }
+// });
 
-const dailyWordJob = schedule.scheduleJob(scheduleRule, async () => {
-  try {
-    const randomGeneratedWord = randomWord();
-    const wordRef = admin.firestore().collection('Word').doc();
-    await wordRef.set({ word: randomGeneratedWord });
-    console.log('Generated and saved daily word:', randomGeneratedWord);
-  } catch (error) {
-    console.error('Error generating and saving daily word:', error);
-  }
+const job = schedule.scheduleJob('3 11 * * *', async function () {
+  try {
+    const randomWords = (await import('random-words')).default; // Use dynamic import
+    const randomWord = randomWords();
+    console.log(`Random word of the day: ${randomWord}`);
+  } catch (error) {
+    console.error('Error:', error);
+  }
 });
-
+app.get('/get', async (req, res) => {
+  res.send(yesterday_word);
+})
 
 // Define routes
 app.post('/register', async (req, res) => {
@@ -84,6 +101,9 @@ app.post('/register', async (req, res) => {
     const newUserRef = await admin.firestore().collection('Users').add({
       email,
       wins: 0,
+      giveUps : 0,
+      totalGames : 0,
+      guesses : 0,
       passwordHash: hashedPassword,
     });
     // userWins[userRecord.uid] = 0;
@@ -102,12 +122,16 @@ app.post('/check', async (req, res) => {
   var exist=words.check(req.body["word"]);
   var res_similarity=0.0;
   word1=req.body["word"];
-  word2="apple";
+  // word2=randomGeneratedWord;
+  word2="tree";
+  console.log(word1, word2)
+  
   calculateSemanticSimilarity(word1, word2)
+  
   .then((similarity) => {
     if(exist)
-    console.log(similarity.toFixed(4));
-    res_similarity=similarity.toFixed(4).toString().split('.')[1].slice(0, 3);
+    console.log(similarity);
+    res_similarity=similarity.toFixed(4);
     const response={
       "similar":res_similarity,
       "exist":exist
