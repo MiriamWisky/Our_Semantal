@@ -1,35 +1,4 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="design.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <script src="game.js" defer></script>
-    
-    
-    <title>SEMANTLE Game</title>
-</head>
-<body onload="init()">
-    <h1>SEMANTLE</h1>
-    <p id="yesterday_word"> </p>
-    <input type="text" id="wordInput" placeholder="Enter a word">
-    <button id="addButton">Guess</button>
-    <table id="wordTable">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Guess</th>
-                <th>Similarity</th>
-            </tr>
-        </thead>
-        <tbody id="wordList">
-        </tbody>
-    </table>
-    
-</body>
-</html> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,10 +10,20 @@
     <title>SEMANTLE Game</title>
 </head>
 <body onload="init()">
+   
     <div class="container">
+        <br><br>
         <h1 class="title">SEMANTLE</h1>
+        <p id="yesterday_word" class="yesterday-word"></p><br>
 
+        <div class="timer-container">
+            <div class="timer-progress"></div>
+            <div class="timer-display">Time remaining: <span id="minutes">5</span>:<span id="seconds">00</span></div>
+          </div>
+        
+        <br>
         <button id="statsButton" class="stats-button">Statistics</button>
+
         
         <div id="statsModal" class="modal">
             <div class="modal-content">
@@ -52,8 +31,12 @@
                 <pre id="statsContent"></pre>
             </div>
         </div>
+        <div id="overlay" class="overlay">
+            <div id="flashingMessage" class="flashing-message">
+                Well done champion!! You discovered the secret word!
+            </div>
+        </div>
         
-        <p id="yesterday_word" class="yesterday-word"></p>
         <div class="input-container">
             <input type="text" id="wordInput" class="input-field" placeholder="Enter a word">
             <button id="addButton" class="add-button">Guess</button>
@@ -69,6 +52,16 @@
             <tbody id="wordList" class="word-list">
             </tbody>
         </table>
+        <br>
+        <br>
+        <button id="giveUpButton" class="give-up-button">Give Up</button>
+        <div id="secretModal" class="modal">
+            <div class="modal-content">
+                <span class="close_secret">&times;</span>
+                <pre id="secretMessage"></pre>
+            </div>
+        </div>
+
     </div>
 </body>
 </html>

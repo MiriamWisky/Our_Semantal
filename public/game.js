@@ -4,7 +4,10 @@
 
  
 // import { createRequire } from 'module';
-var numberOfGames = 10 ,numberOfWins = 5,  numberOfGuesses = 50 ,numberOfGiveUps = 3 , averageGuesses, wins = 0;
+// const readline = require('readline');
+// const clear = require('clear');
+var numberOfGames = 0 ,numberOfWins = 0,  numberOfGuesses = 0 ,numberOfGiveUps = 0 , averageGuesses, wins = 0, secret_word="";
+var discover=false, email="";
 function init(){
     // const require = createRequire(import.meta.url);
     // global.require = require;
@@ -12,45 +15,114 @@ function init(){
     const wordInput = document.getElementById('wordInput');
     const wordList = document.getElementById('wordList');
     const p= document.getElementById('yesterday_word');
-    var word;
+    const giveUp=document.getElementById('giveUpButton');
+    var word, give_up;
     let serialNumber = 1;
-  
-    
-
-   
     const statsButton = document.getElementById("statsButton");
     const statsModal = document.getElementById("statsModal");
     const statsContent = document.getElementById("statsContent");
+    const secretModal = document.getElementById("secretModal");
+    const give_up_message=document.getElementById("secretMessage");
+    const timerProgress = document.querySelector('.timer-progress');
+    const minutesDisplay = document.getElementById('minutes');
+    const secondsDisplay = document.getElementById('seconds');
+
+    const dataToSave={} ;
+
+      
+      // Add an event listener for the beforeunload event
+      window.addEventListener('beforeunload', async () => {
+        //    alert("jhb");  
+           console.log("hujhhhhhhhhhhhhhhhhhhhhhhhhhhk");
+        try {
+   
+            dataToSave["mail"]=email;
+            dataToSave["giveUps"]=numberOfGiveUps;
+            dataToSave["guesses"]=numberOfGuesses;
+            dataToSave["wins"]=numberOfWins;
+            dataToSave["totalGames"]=numberOfGames;
+
+
+          await axios.post('http://localhost:8080/saveToFirestore', { dataToSave });
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      });
+   
+  //-----------------------------------------------------------
+
+
+let remainingTime = 1 * 60; 
+let timerInterval;
+let discover = false;
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+  minutesDisplay.textContent = minutes;
+  secondsDisplay.textContent = seconds < 10 ? '0' + seconds : seconds;
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    remainingTime--;
+    updateTimerDisplay();
+
+    const progressPercentage = (1 - remainingTime / (1 * 60)) * 100;
+    // timerProgress.style.transform = `rotate(${progressPercentage * 3.6}deg)`; // 360 / 100
+
+     timerProgress.style.width = progressPercentage + '%';
+
+    if (remainingTime <= 0) {
+      clearInterval(timerInterval);
+      alert("Time is up! You lose!");
+    } else if (discover) {
+      clearInterval(timerInterval);
+    //   alert("Well done! You win!");
+    }
+  }, 1000); // Update every second
+}
+
+    //--------------------------------------------------------------
 
     statsButton.addEventListener("click", () => {
         statsModal.style.display = "block";
-        // Populate the stats content
-        // const numberOfGames = 10; // Replace with actual number
-        // const numberOfWins = 5;   // Replace with actual number
-        // const numberOfGuesses = 50; // Replace with actual number
-        // const numberOfGiveUps = 3;  // Replace with actual number
-         averageGuesses = (numberOfGuesses + numberOfGiveUps) / numberOfGames; // Calculate average
-
-        const statsText = `
-            🎮 Number of games: ${numberOfGames}
-            &#128170; Number of wins: ${numberOfWins}
-            &#128683; Number of give ups: ${numberOfGiveUps} 
-            &#128221; Number of guesses: ${numberOfGuesses}
-            &#128198; Average guesses: ${averageGuesses.toFixed(2)}
+        averageGuesses = (numberOfGuesses + numberOfGiveUps) / numberOfGames; // Calculate average
+        var level=1;
+        if(numberOfWins>=50)
+         level=2
+         else if(numberOfWins>=100)
+         level=3;
+        const statsText = `                   Overall Statistics
+            
+            🎖  Level: ${level} 
+            🎮 Total games played: ${numberOfGames}
+            &#128170; Wins: ${numberOfWins}
+            &#128683; Give-ups: ${numberOfGiveUps} 
+            &#128221; Total guesses across all games: ${numberOfGuesses}
+            &#128198; Average guesses across all games: ${averageGuesses.toFixed(2)}
         `;
         statsContent.innerHTML = statsText;
     });
+    giveUp.addEventListener("click", () => {
+        const confirmed = confirm("are you sure you want to give up?");
+        // alert("?")
+        if (confirmed){
+            discover=true;
+            give_up=1;
+            secretModal.style.display = "block";
+            give_up_message.innerHTML=`The secret word is ${secret_word}\n\ncome to play again tomorrow 😊`
+            numberOfGiveUps++;
+        }
+        
 
-    window.addEventListener('beforeunload', function(event) {
-         // Send an AJAX request or use Fetch API to notify the server about tab closure
-          fetch('/close-tab', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-             },
-            body: JSON.stringify({ wins: wins }) // You need to define winsVariable
-          });
-        });
+       
+
+    });
+    const closeButton2 = document.querySelector(".close_secret");
+    closeButton2.addEventListener("click", () => {
+        secretModal.style.display = "none";
+    });
 
 
     // Close the modal when the close button is clicked
@@ -59,8 +131,6 @@ function init(){
         statsModal.style.display = "none";
     });
     
-    
-  
     async function get_word(){
         var response=await axios.get(`http://localhost:8080/get`);
         return response.data;
@@ -68,9 +138,22 @@ function init(){
     get_word()
   .then((w) => {
     word=w;
-    p.innerText=`yesterday's word was:${word}`
+    secret_word=word["secretWord"];
+    
+    // console.log(word["details"]);
+    email=word["details"]["mail"];
+    numberOfGiveUps = word["details"]["giveUps"];
+    numberOfGuesses = word["details"]["guesses"];
+    numberOfWins = word["details"]["wins"];
+    numberOfGames = word["details"]["totalGames"] + 1;
+    averageGuesses = numberOfGuesses / numberOfGames;
+    p.innerText=`yesterday's word was:${word["yesterday_word"]}`
     // alert(word);
+    numberOfWins=100
+     if(numberOfWins>=100){
 
+        startTimer();
+     }
   })
   .catch((error) => {
     console.error('error in get_word', error);
@@ -82,6 +165,18 @@ function init(){
         
         const newWord = wordInput.value.trim();
         if (newWord !== '') {
+            // const wordExists = Array.from(wordList.getElementsByTagName('td:nth-child(2)')).some(cell => cell.textContent === newWord);
+            // console.log(wordExists)
+            // if (wordExists) {
+            //     alert("Word already exists in the table");
+            //     return; // Exit the function
+            // }
+            const existingWords = Array.from(document.querySelectorAll('#wordList td:nth-child(2)')).map(cell => cell.textContent);
+            console.log(existingWords);
+            if (existingWords.includes(newWord)) {
+                alert("Word already exists in the table");
+                return; // Exit the function
+            }
         const data={
             "word": newWord
         }
@@ -92,7 +187,7 @@ function init(){
             alert("invalid word")
          
         else {
-        
+            numberOfGuesses++;
             const newRow = document.createElement('tr');
             
             const numberCell = document.createElement('td');
@@ -104,10 +199,30 @@ function init(){
             newRow.appendChild(wordCell);
 
             const similarityCell = document.createElement('td');
-            similarityCell.textContent=`${response.data["similar"]*100} %`
+            similarityCell.textContent=`${(response.data["similar"]*100).toFixed(2)} %`
+            if(response.data["similar"] == 1){
+                discover=true;
+                numberOfWins++;
+                const overlay = document.getElementById("overlay");
+                const flashingMessage = document.getElementById("flashingMessage");
+            
+                // Display the overlay and flashing message
+                overlay.style.display = "block";
+                flashingMessage.style.display = "block";
+            
+                // Add the flashing class
+                flashingMessage.classList.add("flashing");
+            
+                // Set a timeout to hide the message and overlay after 2-3 seconds
+                setTimeout(() => {
+                    flashingMessage.classList.remove("flashing");
+                    flashingMessage.style.display = "none";
+                    overlay.style.display = "none";
+                }, 4500);
+            }
+                
             newRow.appendChild(similarityCell);
 
-            // wordList.appendChild(newRow);
             const existingRows = Array.from(wordList.getElementsByTagName('tr'));
 
             let insertIndex = existingRows.findIndex(row => {

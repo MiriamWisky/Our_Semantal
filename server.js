@@ -16,20 +16,6 @@ const { calculateSemanticSimilarity } = require('./semantic_similarity');
 const app = express();
 
 
-// function runPythonScript(word1, word2, callback) {
-//    const pythonScriptPath = './semantic_func.py'; // Replace with the actual path to your Python script
-//    const pythonCommand = `python ${pythonScriptPath} ${word1} ${word2}`;
-
-//  exec(pythonCommand, (error, stdout, stderr) => {
-//   if (error) {
-//     console.error('Error running Python script:', error);
-//     return;
-//   }
-
-//   const similarity = parseFloat(stdout);
-//   callback(similarity);
-//   });
-// }
 app.use(express.json())
 app.use(cors());
 app.use(bodyParser.json());
@@ -43,44 +29,86 @@ admin.initializeApp({
   // ...
 });
 
-
-
-
 const userWins = {}; // Global object to store user wins
 // var randomGeneratedWord= randomWord();
-
-
 
 const scheduleRule = new schedule.RecurrenceRule();
 scheduleRule.hour = 10;
 scheduleRule.minute = 58;
 scheduleRule.second = 0;
 var yesterday_word="flower";
-// const dailyWordJob = schedule.scheduleJob(scheduleRule, async () => {
-//   yesterday_word=randomGeneratedWord;
-//   try {
-//      randomGeneratedWord = randomWords();
-//     console.log(randomGeneratedWord);
-// //     const wordRef = admin.firestore().collection('Word').doc();
-// //     await wordRef.set({ word: randomGeneratedWord });
-//     console.log('Generated and saved daily word:', randomGeneratedWord);
-//   } catch (error) {
-//     console.error('Error generating and saving daily word:', error);
-//   }
-// });
 
-const job = schedule.scheduleJob('3 11 * * *', async function () {
-  try {
-    const randomWords = (await import('random-words')).default; // Use dynamic import
-    const randomWord = randomWords();
-    console.log(`Random word of the day: ${randomWord}`);
-  } catch (error) {
-    console.error('Error:', error);
-  }
+// const usersCollection = firestore.collection('Users');
+// var mail="";
+var details = { 
+  "mail":"",
+  "giveUps" : 0 , 
+  "guesses": 0,
+  "totalGames": 0,
+  "wins":0
+}
+
+var word="apple";
+const job = schedule.scheduleJob('47 15 * * *', async function () {
+  const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
+  yesterday_word=word;
+  axios.get(apiUrl)
+    .then(response => {
+      const randomWord = response.data[0];
+      word=randomWord;
+      console.log(word)
+
+      // res.send(randomWord);
+    })
+    .catch(error => {
+      res.status(500).send('Error fetching random word');
+    });
 });
 app.get('/get', async (req, res) => {
-  res.send(yesterday_word);
-})
+  const res1 = {
+    "secretWord":word,
+    "details" : details , 
+    "yesterday_word" : yesterday_word
+  }
+  res.send(res1);
+
+});
+app.post('/saveToFirestore', async (req, res) => {
+  try {
+    var  mail, giveUps, guesses, wins, totalGames  ;//= req.body; // Destructure data
+    console.log( mail, giveUps, guesses, wins, totalGames);
+    console.log(req.body);
+    mail=req.body.dataToSave["mail"];
+    console.log(mail);
+    const db = admin.firestore();
+    const usersCollection = db.collection('Users');
+
+    // Query for the user by email
+    const querySnapshot = await usersCollection.where('email', '==', mail).get();
+
+    if (querySnapshot.empty) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Update attributes for each matching document
+    const updatePromises = querySnapshot.docs.map(docSnapshot => {
+      const userRef = docSnapshot.ref;
+      return userRef.update({
+        giveUps,
+        guesses,
+        wins,
+        totalGames
+      });
+    });
+
+    await Promise.all(updatePromises);
+
+    res.status(200).json({ message: 'User attributes updated.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred.' });
+  }
+});
 
 // Define routes
 app.post('/register', async (req, res) => {
@@ -107,6 +135,7 @@ app.post('/register', async (req, res) => {
       passwordHash: hashedPassword,
     });
     // userWins[userRecord.uid] = 0;
+    details["mail"]=email;
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error('Error creating user:', error);
@@ -123,7 +152,7 @@ app.post('/check', async (req, res) => {
   var res_similarity=0.0;
   word1=req.body["word"];
   // word2=randomGeneratedWord;
-  word2="tree";
+  word2=word;
   console.log(word1, word2)
   
   calculateSemanticSimilarity(word1, word2)
@@ -142,36 +171,13 @@ app.post('/check', async (req, res) => {
   .catch((error) => {
     console.error('Error calculating semantic similarity:', error);
   });
-  
-  
- 
-        
-  
-// true
-// const options = {
-//   method: 'GET',
-//   url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/definition/',
-//   params: {entry: req["word"]},
-//   headers: {
-//     'X-RapidAPI-Key': 'c2cd83391emsh39bb54aa7541a5ep161053jsnda76760cfafa',
-//     'X-RapidAPI-Host': 'twinword-word-graph-dictionary.p.rapidapi.com'
-//   }
-// };
-
-// try {
-// 	const response = await axios.request(options,{ httpsAgent: httpsAgent });
-// 	console.log(response.data);
-//   res.send(response)
-// } catch (error) {
-// 	console.error(error);
-// }
 });
 
 app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await getUserByEmail(email);
-
+    console.log(user)
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -181,7 +187,14 @@ app.post('/login', async (req, res) => {
     if (!isAuthenticated) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    userWins[user.uid] = user.wins;
+    console.log("hello")
+    // userWins[user.uid] = user.wins;
+    details["mail"]=email;
+
+         details["giveUps"] = user.giveUps;
+        details["guesses"] = user.guesses;
+        details["totalGames"] = user.totalGames;
+        details["wins"] = user.wins;
     res.status(200).json({ message: 'Login successful', uid: user.uid, userDetails: user });
   } catch (error) {
     console.error('Error logging in:', error);
