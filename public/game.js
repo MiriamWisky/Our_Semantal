@@ -52,7 +52,7 @@ function init(){
   //-----------------------------------------------------------
 
 
-let remainingTime = 1 * 60; 
+let remainingTime = 10 * 60; 
 let timerInterval;
 let discover = false;
 
@@ -68,7 +68,7 @@ function startTimer() {
     remainingTime--;
     updateTimerDisplay();
 
-    const progressPercentage = (1 - remainingTime / (1 * 60)) * 100;
+    const progressPercentage = (1 - remainingTime / (10 * 60)) * 100;
     // timerProgress.style.transform = `rotate(${progressPercentage * 3.6}deg)`; // 360 / 100
 
      timerProgress.style.width = progressPercentage + '%';
@@ -189,7 +189,8 @@ function startTimer() {
         else {
             numberOfGuesses++;
             const newRow = document.createElement('tr');
-            
+            newRow.style.backgroundColor = '#a4ced7';
+
             const numberCell = document.createElement('td');
             numberCell.textContent = serialNumber;
             newRow.appendChild(numberCell);
@@ -235,6 +236,9 @@ function startTimer() {
             } else {
                 wordList.insertBefore(newRow, existingRows[insertIndex]);
             }
+            setTimeout(() => {
+              newRow.style.backgroundColor = '';
+          }, 10000); // Adjust the delay time as needed
 
             wordInput.value = '';
             serialNumber++;

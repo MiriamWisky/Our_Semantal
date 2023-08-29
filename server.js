@@ -79,6 +79,10 @@ app.post('/saveToFirestore', async (req, res) => {
     console.log( mail, giveUps, guesses, wins, totalGames);
     console.log(req.body);
     mail=req.body.dataToSave["mail"];
+    giveUps=req.body.dataToSave["giveUps"]
+    guesses=req.body.dataToSave["guesses"]
+    wins=req.body.dataToSave["wins"]
+    totalGames=req.body.dataToSave["totalGames"]
     console.log(mail);
     const db = admin.firestore();
     const usersCollection = db.collection('Users');
@@ -148,7 +152,9 @@ app.post('/check', async (req, res) => {
   //   console.log(`Semantic similarity between '${word1}' and '${word2}': ${similarity}`);
   //   // Use the similarity value as needed in your code
   // });
-  var exist=words.check(req.body["word"]);
+  // importanttttttt
+  // var exist=words.check(req.body["word"]);
+   var exist=1;
   var res_similarity=0.0;
   word1=req.body["word"];
   // word2=randomGeneratedWord;

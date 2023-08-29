@@ -37,6 +37,10 @@ body, h1, p, table {
     margin: 0;
     padding: 0;
 }
+.red-row {
+    background-color: #a4ced7;
+    transition: background-color 1s; /* Smooth transition effect */
+}
 
 body {
     font-family: Arial, sans-serif;
