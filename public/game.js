@@ -6,7 +6,7 @@
 // import { createRequire } from 'module';
 // const readline = require('readline');
 // const clear = require('clear');
-var numberOfGames = 0 ,numberOfWins = 0,  numberOfGuesses = 0 ,numberOfGiveUps = 0 , averageGuesses, wins = 0, secret_word="";
+var numberOfGames = 0 ,numberOfWins = 0,  numberOfGuesses = 0 ,numberOfGiveUps = 0 , averageGuesses, wins = 0, secret_word="" , lastGiveUp = null , lastWin = null;
 var discover=false, email="";
 function init(){
     // const require = createRequire(import.meta.url);
@@ -27,21 +27,53 @@ function init(){
     const minutesDisplay = document.getElementById('minutes');
     const secondsDisplay = document.getElementById('seconds');
 
+
+    const countdownDisplay = document.getElementById('countdown-display');
+
+    const countdownInterval = setInterval(() => {
+        const now = new Date();
+        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        const remainingTime = (midnight - now) / 1000; // Convert to seconds
+
+        const hours = Math.floor(remainingTime / 3600);
+        const minutes = Math.floor((remainingTime % 3600) / 60);
+        const seconds = Math.floor(remainingTime % 60);
+
+        countdownDisplay.innerHTML = `
+            <div>Time until the next semantale:</div>
+            <div>${hours}h ${minutes}m ${seconds}s</div>
+        `;
+
+        if (remainingTime <= 0) {
+            clearInterval(countdownInterval);
+            countdownDisplay.innerHTML = "Semantale time has arrived!";
+        }
+    }, 1000); // Update every second
+
+
+
+
+
     const dataToSave={} ;
 
       
       // Add an event listener for the beforeunload event
       window.addEventListener('beforeunload', async () => {
-        //    alert("jhb");  
-           console.log("hujhhhhhhhhhhhhhhhhhhhhhhhhhhk");
         try {
-   
+          const lastWinData = {
+            year: lastWin.getFullYear(),
+            month: lastWin.getMonth(),
+            day: lastWin.getDate(),
+          };
+      
+          dataToSave["lastWin"] = lastWinData;
             dataToSave["mail"]=email;
             dataToSave["giveUps"]=numberOfGiveUps;
             dataToSave["guesses"]=numberOfGuesses;
             dataToSave["wins"]=numberOfWins;
             dataToSave["totalGames"]=numberOfGames;
-
+            dataToSave["lastGiveUp"] = lastGiveUp;
+            dataToSave["lastWin"] = lastWinData;
 
           await axios.post('http://localhost:8080/saveToFirestore', { dataToSave });
         } catch (error) {
@@ -108,17 +140,21 @@ function startTimer() {
         const confirmed = confirm("are you sure you want to give up?");
         // alert("?")
         if (confirmed){
+          const today = new Date();
             discover=true;
             give_up=1;
             secretModal.style.display = "block";
             give_up_message.innerHTML=`The secret word is ${secret_word}\n\ncome to play again tomorrow 😊`
+            if(lastGiveUp.getFullYear() == 2000 || today.getFullYear() !== lastGiveUp.getFullYear() ||
+            today.getMonth() !== lastGiveUp.getMonth() ||
+            today.getDate() !== last.getDate())
             numberOfGiveUps++;
+            lastGiveUp = new Date();
         }
         
-
        
-
     });
+
     const closeButton2 = document.querySelector(".close_secret");
     closeButton2.addEventListener("click", () => {
         secretModal.style.display = "none";
@@ -146,6 +182,8 @@ function startTimer() {
     numberOfGuesses = word["details"]["guesses"];
     numberOfWins = word["details"]["wins"];
     numberOfGames = word["details"]["totalGames"] + 1;
+    lastGiveUp = word["details"]["lastGiveUp"];
+    lastWin = word["details"]["lastWin"];
     averageGuesses = numberOfGuesses / numberOfGames;
     p.innerText=`yesterday's word was:${word["yesterday_word"]}`
     // alert(word);
@@ -202,8 +240,23 @@ function startTimer() {
             const similarityCell = document.createElement('td');
             similarityCell.textContent=`${(response.data["similar"]*100).toFixed(2)} %`
             if(response.data["similar"] == 1){
+              const today = new Date();
+              console.log(lastWin);
+              
+              
+            //   if(lastWin != null ){
+            //   today.setHours(0, 0, 0, 0);
+            //   lastWin.setHours(0, 0, 0, 0);
+            // }
                 discover=true;
-                numberOfWins++;
+                if(lastWin != null)
+                console.log("year" + lastWin["year"]  + "day" + lastWin["day"]);
+                if(lastWin == null || today.getFullYear() !== lastWin["year"] || today.getMonth() !== lastWin["month"] ||
+                  today.getDate() !== lastWin["day"])
+                 {
+                  numberOfWins++;
+                  lastWin = new Date();
+                }
                 const overlay = document.getElementById("overlay");
                 const flashingMessage = document.getElementById("flashingMessage");
             
@@ -221,8 +274,15 @@ function startTimer() {
                     overlay.style.display = "none";
                 }, 4500);
             }
-                
+              
+           
+
             newRow.appendChild(similarityCell);
+
+            const gettingClosedCell = document.createElement('td');
+            const similarity = response.data["similar"];
+            gettingClosedCell.textContent = getGettingClosedStatus(similarity);
+            newRow.appendChild(gettingClosedCell);
 
             const existingRows = Array.from(wordList.getElementsByTagName('tr'));
 
@@ -246,6 +306,18 @@ function startTimer() {
     }});
 }
 
+
+function getGettingClosedStatus(similarity) {
+  if(similarity == 1){
+      return "exactly!!!";
+  }else if (similarity >= 0.8) {
+      return "hot!";
+  } else if (similarity >= 0.5) {
+      return "warm!";
+  } else {
+      return "cold";
+  }
+}
 
 
 

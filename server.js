@@ -45,7 +45,10 @@ var details = {
   "giveUps" : 0 , 
   "guesses": 0,
   "totalGames": 0,
-  "wins":0
+  "wins":0 ,
+  "lastGiveUp" : null , 
+  "lastWin" : null
+
 }
 
 var word="apple";
@@ -75,14 +78,18 @@ app.get('/get', async (req, res) => {
 });
 app.post('/saveToFirestore', async (req, res) => {
   try {
-    var  mail, giveUps, guesses, wins, totalGames  ;//= req.body; // Destructure data
+    var  mail, giveUps, guesses, wins, totalGames , lastGiveUp , lastWin  ;//= req.body; // Destructure data
     console.log( mail, giveUps, guesses, wins, totalGames);
     console.log(req.body);
     mail=req.body.dataToSave["mail"];
     giveUps=req.body.dataToSave["giveUps"]
     guesses=req.body.dataToSave["guesses"]
     wins=req.body.dataToSave["wins"]
-    totalGames=req.body.dataToSave["totalGames"]
+    totalGames=req.body.dataToSave["totalGames"];
+    lastGiveUp = req.body.dataToSave["lastGiveUp"];
+    lastWin = req.body.dataToSave["lastWin"];
+    console.log(lastGiveUp);
+    console.log(typeof(lastWin));
     console.log(mail);
     const db = admin.firestore();
     const usersCollection = db.collection('Users');
@@ -101,7 +108,9 @@ app.post('/saveToFirestore', async (req, res) => {
         giveUps,
         guesses,
         wins,
-        totalGames
+        totalGames,
+        lastGiveUp, 
+        lastWin
       });
     });
 
@@ -137,6 +146,8 @@ app.post('/register', async (req, res) => {
       totalGames : 0,
       guesses : 0,
       passwordHash: hashedPassword,
+      lastGiveUp :  null,
+      lastWin : null,
     });
     // userWins[userRecord.uid] = 0;
     details["mail"]=email;
@@ -193,7 +204,7 @@ app.post('/login', async (req, res) => {
     if (!isAuthenticated) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    console.log("hello")
+    console.log("the userrrrr" + user.lastWin)
     // userWins[user.uid] = user.wins;
     details["mail"]=email;
 
@@ -201,6 +212,9 @@ app.post('/login', async (req, res) => {
         details["guesses"] = user.guesses;
         details["totalGames"] = user.totalGames;
         details["wins"] = user.wins;
+        details["lastGiveUp"] = user.lastGiveUp;
+        details["lastWin"] = user.lastWin;
+
     res.status(200).json({ message: 'Login successful', uid: user.uid, userDetails: user });
   } catch (error) {
     console.error('Error logging in:', error);

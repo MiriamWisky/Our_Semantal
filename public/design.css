@@ -256,6 +256,23 @@ body {
   .timer-display {
     font-size: 16px;
   }
+  /* Add this CSS to your design.css or within a <style> tag in your HTML */
+.countdown-container {
+    position: fixed;
+    top: 25px; /* Adjust the top position as needed */
+    right: 25px; /* Adjust the right position as needed */
+    border: 1px solid #007bff;
+    padding: 10px;
+    background-color: #f0f0f0;
+    margin-right: 5px;
+  }
+  
+  .countdown-display {
+    font-size: 18px;
+    line-height: 1.2;
+    text-align: right;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  }
   
 
 
