@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const admin = require('firebase-admin');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
-// const randomWords = require('random-words');
 const schedule = require('node-schedule');
 const axios= require('axios');
 const https = require('https');
@@ -11,7 +10,6 @@ var checkWord=require('check-if-word') ;
 const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 const { exec } = require('child_process');
 const { calculateSemanticSimilarity } = require('./semantic_similarity');
-// import {generate , count} from "random-words";
 
 const app = express();
 
@@ -29,8 +27,7 @@ admin.initializeApp({
   // ...
 });
 
-const userWins = {}; // Global object to store user wins
-// var randomGeneratedWord= randomWord();
+const userWins = {}; 
 
 const scheduleRule = new schedule.RecurrenceRule();
 scheduleRule.hour = 10;
@@ -38,8 +35,6 @@ scheduleRule.minute = 58;
 scheduleRule.second = 0;
 var yesterday_word="flower";
 
-// const usersCollection = firestore.collection('Users');
-// var mail="";
 var details = { 
   "mail":"",
   "giveUps" : 0 , 
@@ -48,20 +43,18 @@ var details = {
   "wins":0 ,
   "lastGiveUp" : null , 
   "lastWin" : null
-
 }
 
 var word="apple";
-const job = schedule.scheduleJob('47 15 * * *', async function () {
+const job = schedule.scheduleJob('00 00 * * *', async function () {
   const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
   yesterday_word=word;
   axios.get(apiUrl)
     .then(response => {
       const randomWord = response.data[0];
       word=randomWord;
-      console.log(word)
+      // console.log(word)
 
-      // res.send(randomWord);
     })
     .catch(error => {
       res.status(500).send('Error fetching random word');
@@ -79,8 +72,8 @@ app.get('/get', async (req, res) => {
 app.post('/saveToFirestore', async (req, res) => {
   try {
     var  mail, giveUps, guesses, wins, totalGames , lastGiveUp , lastWin  ;//= req.body; // Destructure data
-    console.log( mail, giveUps, guesses, wins, totalGames);
-    console.log(req.body);
+    // console.log( mail, giveUps, guesses, wins, totalGames);
+    // console.log(req.body);
     mail=req.body.dataToSave["mail"];
     giveUps=req.body.dataToSave["giveUps"]
     guesses=req.body.dataToSave["guesses"]
@@ -88,9 +81,6 @@ app.post('/saveToFirestore', async (req, res) => {
     totalGames=req.body.dataToSave["totalGames"];
     lastGiveUp = req.body.dataToSave["lastGiveUp"];
     lastWin = req.body.dataToSave["lastWin"];
-    console.log(lastGiveUp);
-    console.log(typeof(lastWin));
-    console.log(mail);
     const db = admin.firestore();
     const usersCollection = db.collection('Users');
 
@@ -159,31 +149,24 @@ app.post('/register', async (req, res) => {
 });
 app.post('/check', async (req, res) => {
   words = checkWord('en');// setup the language for check, default is en
-  // runPythonScript(req.body["word"], "apple", (similarity) => {
-  //   console.log(`Semantic similarity between '${word1}' and '${word2}': ${similarity}`);
-  //   // Use the similarity value as needed in your code
-  // });
-  // importanttttttt
-  // var exist=words.check(req.body["word"]);
-   var exist=1;
+  var exist=words.check(req.body["word"]);
+  //  var exist=1;
   var res_similarity=0.0;
   word1=req.body["word"];
-  // word2=randomGeneratedWord;
   word2=word;
-  console.log(word1, word2)
+  // console.log(word1, word2)
   
   calculateSemanticSimilarity(word1, word2)
   
   .then((similarity) => {
     if(exist)
-    console.log(similarity);
+    // console.log(similarity);
     res_similarity=similarity.toFixed(4);
     const response={
       "similar":res_similarity,
       "exist":exist
     }
      res.send(response);
-    // console.log(`Semantic similarity between '${word1}' and '${word2}': ${similarity.toFixed(4)}`);
   })
   .catch((error) => {
     console.error('Error calculating semantic similarity:', error);
@@ -194,7 +177,7 @@ app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await getUserByEmail(email);
-    console.log(user)
+    // console.log(user)
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -204,8 +187,7 @@ app.post('/login', async (req, res) => {
     if (!isAuthenticated) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    console.log("the userrrrr" + user.lastWin)
-    // userWins[user.uid] = user.wins;
+    // console.log("the userrrrr" + user.lastWin)
     details["mail"]=email;
 
          details["giveUps"] = user.giveUps;

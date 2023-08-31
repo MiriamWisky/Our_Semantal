@@ -1,15 +1,42 @@
-//  const axios = require('axios');
+function init(){
+  const loginForm = document.getElementById('loginForm');
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    console.log('Login form submitted'); 
+    const formData = new FormData(loginForm);
+    const email = formData.get('email');
+    const password = formData.get('password');
+    await login(email, password);
+  });
 
-const API_URL = 'http://localhost:8080'; // Update with your server URL
+  const registerButton = document.getElementById('registerButton');
+  registerButton.addEventListener('click', () => {
+    window.location.href = 'register.html';
+  });
+
+ 
+}
+function initRegister(){
+  const registerForm = document.getElementById('registerForm');
+  registerForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    console.log('register form submitted'); 
+    const formData = new FormData(registerForm);
+    const email = formData.get('email');
+    const password = formData.get('password');
+    await register(email, password);
+  });
+}
+
+
+const API_URL = 'http://localhost:8080'; 
 
 // Registration function
 async function register(email, password) {
   try {
     const response = await axios.post(`${API_URL}/register`, { email, password });
-    console.log("Registration response:", response.data);
 
     const { message } = response.data;
-    console.log("Message:", message);
 
     if (message === 'User registered successfully') {
       window.location.href = '/dashboard.html'; // Redirect to dashboard.html
@@ -23,28 +50,24 @@ async function register(email, password) {
     }
   }
 }
-// Login function
+
 // Login function
 async function login(email, password) {
   try {
     const response = await axios.post(`${API_URL}/login`, { email, password });
-    console.log(response.data.message);
 
     const { uid, userDetails } = response.data;
 
     // Update the wins count for the logged-in user
     const winsCount = userDetails.wins;
-    // Redirect to a new page after successful login
-    window.location.href = '/dashboard.html'; // Update with the desired URL
+    
+    window.location.href = '/dashboard.html'; 
   } catch (error) {
     if (error.response && error.response.status === 401) {
       console.error('Error logging in:', 'Invalid credentials');
-      alert('Invalid email or password'); // Display alert to the user
+      alert('Invalid email or password'); 
     } else {
       console.error('Error logging in:', error.response ? error.response.data.message : error.message);
     }
   }
 }
-
-
-// ... (remaining code)

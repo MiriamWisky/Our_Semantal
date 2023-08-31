@@ -1,35 +1,27 @@
-// const async = require("hbs/lib/async");
-
-// const async = require("hbs/lib/async");
-
- 
-// import { createRequire } from 'module';
-// const readline = require('readline');
-// const clear = require('clear');
 var numberOfGames = 0 ,numberOfWins = 0,  numberOfGuesses = 0 ,numberOfGiveUps = 0 , averageGuesses, wins = 0, secret_word="" , lastGiveUp = null , lastWin = null;
 var discover=false, email="";
+var word;
+let serialNumber = 1;
 function init(){
-    // const require = createRequire(import.meta.url);
-    // global.require = require;
     const addButton = document.getElementById('addButton');
     const wordInput = document.getElementById('wordInput');
     const wordList = document.getElementById('wordList');
-    const p= document.getElementById('yesterday_word');
+    const yesterday_w= document.getElementById('yesterday_word');
     const giveUp=document.getElementById('giveUpButton');
-    var word, give_up;
-    let serialNumber = 1;
     const statsButton = document.getElementById("statsButton");
     const statsModal = document.getElementById("statsModal");
     const statsContent = document.getElementById("statsContent");
     const secretModal = document.getElementById("secretModal");
     const give_up_message=document.getElementById("secretMessage");
     const timerProgress = document.querySelector('.timer-progress');
+    const timerContainer = document.querySelector('.timer-container');
     const minutesDisplay = document.getElementById('minutes');
     const secondsDisplay = document.getElementById('seconds');
-
-
     const countdownDisplay = document.getElementById('countdown-display');
 
+ //-----------------------------------------------------------
+
+    // Display the time until the next Semantle
     const countdownInterval = setInterval(() => {
         const now = new Date();
         const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
@@ -50,29 +42,34 @@ function init(){
         }
     }, 1000); // Update every second
 
+ //-----------------------------------------------------------
 
-
-
-
+    //Updating the database with the required details when the user leaves the game
+    
     const dataToSave={} ;
-
-      
-      // Add an event listener for the beforeunload event
       window.addEventListener('beforeunload', async () => {
         try {
-          const lastWinData = {
+          const lastWinData = null , lastGiveUpData = null;
+          if(lastWin != null)
+          lastWinData = {
             year: lastWin.getFullYear(),
             month: lastWin.getMonth(),
             day: lastWin.getDate(),
           };
-      
-          dataToSave["lastWin"] = lastWinData;
+          if(lastGiveUp != null)
+           lastGiveUpData = {
+            year: lastGiveUp.getFullYear(),
+            month: lastGiveUp.getMonth(),
+            day: lastGiveUp.getDate(),
+          };
+
+            dataToSave["lastWin"] = lastWinData;
             dataToSave["mail"]=email;
             dataToSave["giveUps"]=numberOfGiveUps;
             dataToSave["guesses"]=numberOfGuesses;
             dataToSave["wins"]=numberOfWins;
             dataToSave["totalGames"]=numberOfGames;
-            dataToSave["lastGiveUp"] = lastGiveUp;
+            dataToSave["lastGiveUp"] = lastGiveUpData;
             dataToSave["lastWin"] = lastWinData;
 
           await axios.post('http://localhost:8080/saveToFirestore', { dataToSave });
@@ -83,7 +80,7 @@ function init(){
    
   //-----------------------------------------------------------
 
-
+//A level 3 user plays with a 10 minute timer
 let remainingTime = 10 * 60; 
 let timerInterval;
 let discover = false;
@@ -94,14 +91,12 @@ function updateTimerDisplay() {
   minutesDisplay.textContent = minutes;
   secondsDisplay.textContent = seconds < 10 ? '0' + seconds : seconds;
 }
-
 function startTimer() {
   timerInterval = setInterval(() => {
     remainingTime--;
     updateTimerDisplay();
 
     const progressPercentage = (1 - remainingTime / (10 * 60)) * 100;
-    // timerProgress.style.transform = `rotate(${progressPercentage * 3.6}deg)`; // 360 / 100
 
      timerProgress.style.width = progressPercentage + '%';
 
@@ -110,13 +105,13 @@ function startTimer() {
       alert("Time is up! You lose!");
     } else if (discover) {
       clearInterval(timerInterval);
-    //   alert("Well done! You win!");
     }
-  }, 1000); // Update every second
+  }, 1000); 
 }
 
     //--------------------------------------------------------------
 
+    //A button to display the player's statistics
     statsButton.addEventListener("click", () => {
         statsModal.style.display = "block";
         averageGuesses = (numberOfGuesses + numberOfGiveUps) / numberOfGames; // Calculate average
@@ -136,23 +131,23 @@ function startTimer() {
         `;
         statsContent.innerHTML = statsText;
     });
+
+//-----------------------------------------------------------
+
+//"give up" button + discover the word.
     giveUp.addEventListener("click", () => {
         const confirmed = confirm("are you sure you want to give up?");
-        // alert("?")
         if (confirmed){
           const today = new Date();
             discover=true;
             give_up=1;
             secretModal.style.display = "block";
             give_up_message.innerHTML=`The secret word is ${secret_word}\n\ncome to play again tomorrow 😊`
-            if(lastGiveUp.getFullYear() == 2000 || today.getFullYear() !== lastGiveUp.getFullYear() ||
-            today.getMonth() !== lastGiveUp.getMonth() ||
-            today.getDate() !== last.getDate())
+            if(lastGiveUp == null || today.getFullYear() !== lastGiveUp["year"] || today.getMonth() !== lastGiveUp["month"] ||
+                  today.getDate() !== lastGiveUp["day"])
             numberOfGiveUps++;
             lastGiveUp = new Date();
         }
-        
-       
     });
 
     const closeButton2 = document.querySelector(".close_secret");
@@ -167,6 +162,9 @@ function startTimer() {
         statsModal.style.display = "none";
     });
     
+//-----------------------------------------------------------
+
+//Getting the word and other details are needed at the beginning of the game.
     async function get_word(){
         var response=await axios.get(`http://localhost:8080/get`);
         return response.data;
@@ -176,7 +174,6 @@ function startTimer() {
     word=w;
     secret_word=word["secretWord"];
     
-    // console.log(word["details"]);
     email=word["details"]["mail"];
     numberOfGiveUps = word["details"]["giveUps"];
     numberOfGuesses = word["details"]["guesses"];
@@ -185,42 +182,35 @@ function startTimer() {
     lastGiveUp = word["details"]["lastGiveUp"];
     lastWin = word["details"]["lastWin"];
     averageGuesses = numberOfGuesses / numberOfGames;
-    p.innerText=`yesterday's word was:${word["yesterday_word"]}`
-    // alert(word);
-    numberOfWins=100
+    yesterday_w.innerText=`yesterday's word was:${word["yesterday_word"]}`
+    // numberOfWins=100
      if(numberOfWins>=100){
 
         startTimer();
+        timerContainer.style.display = 'block';
      }
   })
   .catch((error) => {
     console.error('error in get_word', error);
   });
     
-
+//-----------------------------------------------------------
   
+// Adding the word to the table sorted by semantic distance
     addButton.addEventListener('click', async () => {
         
         const newWord = wordInput.value.trim();
         if (newWord !== '') {
-            // const wordExists = Array.from(wordList.getElementsByTagName('td:nth-child(2)')).some(cell => cell.textContent === newWord);
-            // console.log(wordExists)
-            // if (wordExists) {
-            //     alert("Word already exists in the table");
-            //     return; // Exit the function
-            // }
             const existingWords = Array.from(document.querySelectorAll('#wordList td:nth-child(2)')).map(cell => cell.textContent);
-            console.log(existingWords);
             if (existingWords.includes(newWord)) {
                 alert("Word already exists in the table");
-                return; // Exit the function
+                return; 
             }
         const data={
             "word": newWord
         }
         
          const response = await axios.post(`http://localhost:8080/check`, data);
-        //   console.log(response.data["similar"]);
          if(!response.data["exist"])
             alert("invalid word")
          
@@ -241,16 +231,8 @@ function startTimer() {
             similarityCell.textContent=`${(response.data["similar"]*100).toFixed(2)} %`
             if(response.data["similar"] == 1){
               const today = new Date();
-              console.log(lastWin);
               
-              
-            //   if(lastWin != null ){
-            //   today.setHours(0, 0, 0, 0);
-            //   lastWin.setHours(0, 0, 0, 0);
-            // }
                 discover=true;
-                if(lastWin != null)
-                console.log("year" + lastWin["year"]  + "day" + lastWin["day"]);
                 if(lastWin == null || today.getFullYear() !== lastWin["year"] || today.getMonth() !== lastWin["month"] ||
                   today.getDate() !== lastWin["day"])
                  {
@@ -260,22 +242,18 @@ function startTimer() {
                 const overlay = document.getElementById("overlay");
                 const flashingMessage = document.getElementById("flashingMessage");
             
-                // Display the overlay and flashing message
                 overlay.style.display = "block";
                 flashingMessage.style.display = "block";
             
-                // Add the flashing class
                 flashingMessage.classList.add("flashing");
             
-                // Set a timeout to hide the message and overlay after 2-3 seconds
+                // Set a timeout to hide the message and overlay after 4.5 seconds
                 setTimeout(() => {
                     flashingMessage.classList.remove("flashing");
                     flashingMessage.style.display = "none";
                     overlay.style.display = "none";
                 }, 4500);
             }
-              
-           
 
             newRow.appendChild(similarityCell);
 
@@ -298,7 +276,7 @@ function startTimer() {
             }
             setTimeout(() => {
               newRow.style.backgroundColor = '';
-          }, 10000); // Adjust the delay time as needed
+          }, 10000); 
 
             wordInput.value = '';
             serialNumber++;
@@ -306,7 +284,9 @@ function startTimer() {
     }});
 }
 
+//-----------------------------------------------------------
 
+//Determining proximity in words
 function getGettingClosedStatus(similarity) {
   if(similarity == 1){
       return "exactly!!!";

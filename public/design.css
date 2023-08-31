@@ -1,35 +1,3 @@
-/* body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-}
-
-h1 {
-    color: #333;
-}
-
-table {
-    margin: 20px auto;
-    border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid #333;
-}
-
-th, td {
-    padding: 8px 50px;
-}
-
-input[type="text"] {
-    padding: 5px;
-    font-size: 16px;
-}
-
-button {
-    padding: 5px 10px;
-    font-size: 16px;
-} */
-/* Reset some default styles */
 table, th, td {
     border: 1px solid  #007bff;
 }
@@ -39,15 +7,13 @@ body, h1, p, table {
 }
 .red-row {
     background-color: #a4ced7;
-    transition: background-color 1s; /* Smooth transition effect */
+    transition: background-color 1s; 
 }
 
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     color: #333;
-    /* display: flex;
-    flex-direction: row; */
 }
 
 .container {
@@ -107,8 +73,6 @@ body {
     background-color: #f0f0f0;
 }
 
-/* ---------------- */
-/* ... (your existing CSS rules) ... */
 
 .modal {
     display: none;
@@ -168,30 +132,7 @@ body {
     text-align: center;
     display: flex;
     justify-content: center;
-    /* margin-right: 10px;  */
 }
-/* .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-} */
-
-/* .modal-content {
-    background-color: white;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 5px;
-    width: 70%;
-    text-align: center; 
-} */
-/* Your existing CSS rules */
-
-/* styles.css */
 
 .overlay {
     display: none;
@@ -200,17 +141,10 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
-    z-index: 1000; /* Make sure it's above everything else */
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1000; 
 }
 
-/* .flashing-message {
-    display: none;
-    font-size: 36px;
-    font-weight: bold;
-    text-align: center;
-    color: white; /* Text color for the flashing message */
-/* } */ 
 
 .flashing {
     animation: flashing 1s infinite;
@@ -233,17 +167,14 @@ body {
     text-align: center;
     color:#f6f6c0;
     position: absolute;
-    top: 50%; /* Position the message vertically in the middle */
-    left: 50%; /* Position the message horizontally in the middle */
-    transform: translate(-50%, -50%); /* Center the message */
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
 }
 .timer-container {
+    display: none;
     text-align: center;
-    /* width: 200px; */
     width: 100%;
-    /* margin-top: 0px; */
-    /* margin-left: 90px; */
-    /* background-color: #000000; */
 
   }
   
@@ -256,11 +187,10 @@ body {
   .timer-display {
     font-size: 16px;
   }
-  /* Add this CSS to your design.css or within a <style> tag in your HTML */
 .countdown-container {
     position: fixed;
-    top: 25px; /* Adjust the top position as needed */
-    right: 25px; /* Adjust the right position as needed */
+    top: 25px; 
+    right: 25px; 
     border: 1px solid #007bff;
     padding: 10px;
     background-color: #f0f0f0;
