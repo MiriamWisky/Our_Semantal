@@ -28,13 +28,14 @@ function initRegister(){
   });
 }
 
-
-const API_URL = 'http://localhost:8080'; 
-
+//  const API_URL = 'http://localhost:80'; 
+// const API_URL = 'https://semantale-57712.web.app'; 
+const API_URL = "";
 // Registration function
 async function register(email, password) {
   try {
-    const response = await axios.post(`${API_URL}/register`, { email, password });
+    onsole.log("miriam");
+    const response = await axios.post(`${API_URL}/register`, { email, password } );
 
     const { message } = response.data;
 
@@ -54,12 +55,13 @@ async function register(email, password) {
 // Login function
 async function login(email, password) {
   try {
+    console.log("miriam");
     const response = await axios.post(`${API_URL}/login`, { email, password });
 
     const { uid, userDetails } = response.data;
 
     // Update the wins count for the logged-in user
-    const winsCount = userDetails.wins;
+    // const winsCount = userDetails.wins;
     
     window.location.href = '/dashboard.html'; 
   } catch (error) {

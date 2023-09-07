@@ -18,8 +18,10 @@ function init(){
     const minutesDisplay = document.getElementById('minutes');
     const secondsDisplay = document.getElementById('seconds');
     const countdownDisplay = document.getElementById('countdown-display');
-
+    // const serverBaseUrl = process.env.SERVER_BASE_URL || 'http://localhost:8080'; // Replace with your server's URL
+      // const serverBaseUrl =  'http://localhost:80';
  //-----------------------------------------------------------
+   const serverBaseUrl = 'https://semantale-57712.web.app'; // Use your Firebase Hosting URL
 
     // Display the time until the next Semantle
     const countdownInterval = setInterval(() => {
@@ -72,7 +74,7 @@ function init(){
             dataToSave["lastGiveUp"] = lastGiveUpData;
             dataToSave["lastWin"] = lastWinData;
 
-          await axios.post('http://localhost:8080/saveToFirestore', { dataToSave });
+          await axios.post(`${serverBaseUrl}/saveToFirestore`, { dataToSave });
         } catch (error) {
           console.error('Error:', error);
         }
@@ -166,7 +168,7 @@ function startTimer() {
 
 //Getting the word and other details are needed at the beginning of the game.
     async function get_word(){
-        var response=await axios.get(`http://localhost:8080/get`);
+        var response=await axios.get(`${serverBaseUrl}/get`);
         return response.data;
     }
     get_word()
@@ -210,7 +212,7 @@ function startTimer() {
             "word": newWord
         }
         
-         const response = await axios.post(`http://localhost:8080/check`, data);
+         const response = await axios.post(`${serverBaseUrl}/check`, data);
          if(!response.data["exist"])
             alert("invalid word")
          

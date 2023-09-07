@@ -1,13 +1,15 @@
+// 
 const express = require('express');
 const bodyParser = require('body-parser');
 const admin = require('firebase-admin');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const schedule = require('node-schedule');
-const axios= require('axios');
+const axios = require('axios').default;
 const https = require('https');
 var checkWord=require('check-if-word') ;
-const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+require('dotenv').config();
+// const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 const { exec } = require('child_process');
 const { calculateSemanticSimilarity } = require('./semantic_similarity');
 
@@ -15,10 +17,31 @@ const app = express();
 
 
 app.use(express.json())
-app.use(cors());
+
+
+
+
+// ////////////
+// const corsOptions = {
+//   origin: 'https://semantale-57712.web.app', // Replace with your Firebase Hosting URL
+//   methods: 'GET,POST',
+//   allowedHeaders: 'Content-Type', // Add other required headers
+//   optionsSuccessStatus: 204, // Set this status for preflight requests
+// };
+
+// app.use(cors(corsOptions));
+
+
+
+ app.use(cors());
+
+
+
+////////////////////////////
 app.use(bodyParser.json());
 app.use(express.static('public'));
-const port = 8080;
+
+
 
 // Initialize Firebase Admin SDK
 const serviceAccount = require('./firebase-admin-SDK.json');
@@ -66,6 +89,7 @@ app.get('/get', async (req, res) => {
     "details" : details , 
     "yesterday_word" : yesterday_word
   }
+  console.log(res1["details"]["mail"]);
   res.send(res1);
 
 });
@@ -217,7 +241,7 @@ async function hashPassword(password) {
   const saltRounds = 10;
   return bcrypt.hash(password, saltRounds);
 }
-
+const port = process.env.PORT || 443;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
