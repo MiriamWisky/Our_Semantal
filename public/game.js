@@ -175,7 +175,7 @@ function startTimer() {
   .then((w) => {
     word=w;
     secret_word=word["secretWord"];
-    
+    console.log(word["details"]);
     email=word["details"]["mail"];
     numberOfGiveUps = word["details"]["giveUps"];
     numberOfGuesses = word["details"]["guesses"];

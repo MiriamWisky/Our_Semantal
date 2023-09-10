@@ -8,6 +8,8 @@ const schedule = require('node-schedule');
 const axios = require('axios').default;
 const https = require('https');
 var checkWord=require('check-if-word') ;
+const winston = require('winston');
+const path = require('path');
 require('dotenv').config();
 // const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 const { exec } = require('child_process');
@@ -42,7 +44,12 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 
-
+// const logFilePath = path.join(__dirname, 'logs', 'app.log'); // Change the path as needed
+// const logger = winston.createLogger({
+//   transports: [
+//     new winston.transports.File({ filename: logFilePath }),
+//   ],
+// });
 // Initialize Firebase Admin SDK
 const serviceAccount = require('./firebase-admin-SDK.json');
 admin.initializeApp({
@@ -89,7 +96,7 @@ app.get('/get', async (req, res) => {
     "details" : details , 
     "yesterday_word" : yesterday_word
   }
-  console.log(res1["details"]["mail"]);
+  console.log( res1["details"]["mail"]);
   res.send(res1);
 
 });
@@ -241,7 +248,8 @@ async function hashPassword(password) {
   const saltRounds = 10;
   return bcrypt.hash(password, saltRounds);
 }
-const port = process.env.PORT || 443;
+// const port = process.env.PORT || 443;
+const port = 443;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
