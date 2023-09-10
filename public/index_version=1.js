@@ -30,7 +30,7 @@ function initRegister(){
 
 //  const API_URL = 'http://localhost:80'; 
 // const API_URL = 'https://semantale-57712.web.app'; 
-const API_URL = "";
+const API_URL = "https://senantle.onrender.com/";
 // Registration function
 async function register(email, password) {
   try {
