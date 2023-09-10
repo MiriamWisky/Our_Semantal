@@ -35,8 +35,14 @@ app.use(express.json())
 
 
 
- app.use(cors());
+//  app.use(cors());
+const corsOptions = {
+  origin: 'https://semantale-57712.web.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  optionsSuccessStatus: 204, // Some legacy browsers (IE11) choke on 204
+};
 
+app.use(cors(corsOptions));
 
 
 ////////////////////////////
