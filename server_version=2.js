@@ -14,7 +14,7 @@ require('dotenv').config();
 // const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 const { exec } = require('child_process');
 const { calculateSemanticSimilarity } = require('./semantic_similarity');
-
+const functions = require('firebase-functions');
 const app = express();
 
 
@@ -233,7 +233,7 @@ app.post('/login', async (req, res) => {
         details["wins"] = user.wins;
         details["lastGiveUp"] = user.lastGiveUp;
         details["lastWin"] = user.lastWin;
-
+console.log(details["mail"]);
     res.status(200).json({ message: 'Login successful', uid: user.uid, userDetails: user });
   } catch (error) {
     console.error('Error logging in:', error);
@@ -254,9 +254,11 @@ async function hashPassword(password) {
   const saltRounds = 10;
   return bcrypt.hash(password, saltRounds);
 }
-// const port = process.env.PORT || 443;
-const port = 443;
+ const port = process.env.PORT || 8080;
+// const port = 443;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
+// exports.app = functions.https.onRequest(app);
+
 

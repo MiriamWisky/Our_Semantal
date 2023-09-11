@@ -174,6 +174,7 @@ function startTimer() {
     get_word()
   .then((w) => {
     word=w;
+    console.log(word);
     secret_word=word["secretWord"];
     console.log(word["details"]);
     email=word["details"]["mail"];

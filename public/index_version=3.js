@@ -8,7 +8,7 @@ function init(){
     const password = formData.get('password');
     await login(email, password);
   });
-
+////////////
   const registerButton = document.getElementById('registerButton');
   registerButton.addEventListener('click', () => {
     window.location.href = 'register.html';
@@ -38,7 +38,7 @@ async function register(email, password) {
     const response = await axios.post(`${API_URL}/register`, { email, password } );
 
     const { message } = response.data;
-
+    
     if (message === 'User registered successfully') {
       window.location.href = '/dashboard.html'; // Redirect to dashboard.html
     }
@@ -58,12 +58,15 @@ async function login(email, password) {
     console.log("miriam");
     const response = await axios.post(`${API_URL}/login`, { email, password });
 
-    const { uid, userDetails } = response.data;
-
+    console.log("message  " + response.data);
     // Update the wins count for the logged-in user
     // const winsCount = userDetails.wins;
-    
-    window.location.href = '/dashboard.html'; 
+    const { message, userDetails } = response.data;
+
+    if (message === 'Login successful') {
+      // Redirect to the next page (e.g., dashboard.html)
+      window.location.href = '/dashboard.html'; // Modify the URL as needed
+    }
   } catch (error) {
     if (error.response && error.response.status === 401) {
       console.error('Error logging in:', 'Invalid credentials');
