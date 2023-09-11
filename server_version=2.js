@@ -14,7 +14,7 @@ require('dotenv').config();
 // const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 const { exec } = require('child_process');
 const { calculateSemanticSimilarity } = require('./semantic_similarity');
-const functions = require('firebase-functions');
+// const functions = require('firebase-functions');
 const app = express();
 
 
