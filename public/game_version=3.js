@@ -18,11 +18,11 @@ function init(){
     const minutesDisplay = document.getElementById('minutes');
     const secondsDisplay = document.getElementById('seconds');
     const countdownDisplay = document.getElementById('countdown-display');
-    // const serverBaseUrl = process.env.SERVER_BASE_URL || 'http://localhost:8080'; // Replace with your server's URL
+    // const serverBaseUrl = process.env.SERVER_BASE_URL || 'https://senantle.onrender.com/'; // Replace with your server's URL
       // const serverBaseUrl =  'http://localhost:80';
  //-----------------------------------------------------------
-   const serverBaseUrl = 'https://semantale-57712.web.app'; // Use your Firebase Hosting URL
-
+  //  const serverBaseUrl = 'https://semantale-57712.web.app'; // Use your Firebase Hosting URL
+  const serverBaseUrl = 'https://senantle.onrender.com/';
     // Display the time until the next Semantle
     const countdownInterval = setInterval(() => {
         const now = new Date();

@@ -37,7 +37,7 @@ app.use(express.json())
 
 //  app.use(cors());
 const corsOptions = {
-  origin: 'https://semantale-57712.web.app',
+  origin: 'https://senantle.onrender.com/',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   optionsSuccessStatus: 204, // Some legacy browsers (IE11) choke on 204
 };
