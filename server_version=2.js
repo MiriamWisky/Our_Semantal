@@ -181,10 +181,10 @@ app.post('/register', async (req, res) => {
 });
 app.post('/check', async (req, res) => {
   console.log(req.body["word"]);
-  let words = checkWord('en');// setup the language for check, default is en
-  var exist=words.check(req.body["word"]);
-  console.log(exist);
-  //  var exist=1;
+  // let words = checkWord('en');// setup the language for check, default is en
+  // var exist=words.check(req.body["word"]);
+  // console.log(exist);
+   var exist=1;
   var res_similarity=0.0;
   let word1=req.body["word"];
   let word2=word;
