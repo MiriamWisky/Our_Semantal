@@ -37,7 +37,8 @@ app.use(express.json())
 
 //  app.use(cors());
 const corsOptions = {
-  origin: 'https://senantle.onrender.com',
+  origin: 'https://senantle.onrender.com',//הכתובת של הדפלוי ברנדר
+  //'https://semantale-57712.web.app' הכתובת של הדפלוי בפיירבייס
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   optionsSuccessStatus: 204, // Some legacy browsers (IE11) choke on 204
 };
@@ -50,12 +51,6 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 
-// const logFilePath = path.join(__dirname, 'logs', 'app.log'); // Change the path as needed
-// const logger = winston.createLogger({
-//   transports: [
-//     new winston.transports.File({ filename: logFilePath }),
-//   ],
-// });
 // Initialize Firebase Admin SDK
 const serviceAccount = require('./firebase-admin-SDK.json');
 admin.initializeApp({
@@ -185,6 +180,7 @@ app.post('/register', async (req, res) => {
   }
 });
 app.post('/check', async (req, res) => {
+  console.log(req.body["word"]);
   words = checkWord('en');// setup the language for check, default is en
   var exist=words.check(req.body["word"]);
   //  var exist=1;

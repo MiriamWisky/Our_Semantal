@@ -29,8 +29,8 @@ function initRegister(){
 }
 
 //  const API_URL = 'http://localhost:80'; 
-//  const API_URL = 'https://semantale-57712.web.app'; 
- const API_URL = "https://senantle.onrender.com";
+//  const API_URL = 'https://semantale-57712.web.app';// הכתובת של הדפלוי בפיירבייס
+ const API_URL = "https://senantle.onrender.com";   //הכתובת של הדפלוי ברנדר
 // Registration function
 async function register(email, password) {
   try {

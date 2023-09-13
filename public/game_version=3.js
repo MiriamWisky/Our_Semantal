@@ -21,8 +21,8 @@ function init(){
     // const serverBaseUrl = process.env.SERVER_BASE_URL || 'https://senantle.onrender.com/'; // Replace with your server's URL
       // const serverBaseUrl =  'http://localhost:80';
  //-----------------------------------------------------------
-  //  const serverBaseUrl = 'https://semantale-57712.web.app'; // Use your Firebase Hosting URL
-  const serverBaseUrl = 'https://senantle.onrender.com';
+  //  const serverBaseUrl = 'https://semantale-57712.web.app'; // הכתובת של הדפלוי בפיירבייס
+  const serverBaseUrl = 'https://senantle.onrender.com'; //הכתובת של הדפלוי ברנדר
     // Display the time until the next Semantle
     const countdownInterval = setInterval(() => {
         const now = new Date();
