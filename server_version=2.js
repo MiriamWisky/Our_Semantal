@@ -180,6 +180,8 @@ app.post('/register', async (req, res) => {
   }
 });
 app.post('/check', async (req, res) => {
+  console.log(process.env.PATH);
+
   console.log(req.body["word"]);
   // let words = checkWord('en');// setup the language for check, default is en
   // var exist=words.check(req.body["word"]);
