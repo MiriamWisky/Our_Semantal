@@ -1,0 +1,19 @@
+# render.yaml
+
+services:
+  - type: web
+    name: node-express-app
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    env:
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /
+
+  - type: worker
+    name: python-ml-worker
+    buildCommand:  # This could be empty for a Python script running as a worker
+    startCommand: python semantic_similarity.py  # Adjust the path as needed
+    env:
+      - key: PYTHON_ENV
+        value: production
