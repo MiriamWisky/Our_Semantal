@@ -19,7 +19,7 @@ const { exec } = require('child_process');
 
 function calculateSemanticSimilarity(word1, word2) {
   return new Promise((resolve, reject) => {
-    const pythonPath = 'C:/Users/Miriam/AppData/Local/Programs/Python/Python311/python3.exe';
+    const pythonPath = 'C:\Users\Miriam\AppData\Local\Programs\Python\Python311\python.exe';
     
     const command = `${pythonPath} -c "import semantic_func; print(semantic_func.semantic_similarity('${word1}', '${word2}'))"`;
 
