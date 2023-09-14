@@ -22,8 +22,9 @@ function init(){
       // const serverBaseUrl =  'http://localhost:80';
  //-----------------------------------------------------------
   //  const serverBaseUrl = 'https://semantale-57712.web.app'; // הכתובת של הדפלוי בפיירבייס
-  const serverBaseUrl = 'https://our-semantal.vercel.app'; //הכתובת של הדפלוי ברנדר
+  const serverBaseUrl = 'https://senantle.onrender.com'; //הכתובת של הדפלוי ברנדר
     //https://senantle.onrender.com 
+    // https://our-semantal.vercel.app
   // Display the time until the next Semantle
     const countdownInterval = setInterval(() => {
         const now = new Date();

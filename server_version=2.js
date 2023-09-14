@@ -37,7 +37,7 @@ app.use(express.json())
 
 //  app.use(cors());
 const corsOptions = {
-  origin: 'https://our-semantal.vercel.app',//הכתובת של הדפלוי ברנדר
+  origin: 'https://senantle.onrender.com',//הכתובת של הדפלוי ברנדר
   // https://our-semantal.vercel.app/
   //'https://semantale-57712.web.app' הכתובת של הדפלוי בפיירבייס
   //'https://senantle.onrender.com' הכתובת של הדפלוי בפיירבייס
