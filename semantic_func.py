@@ -3,7 +3,9 @@ import spacy
 import numpy as np
 
 # Load a pre-trained word embedding model
-nlp = spacy.load("en_core_web_md")
+# nlp = spacy.load("en_core_web_md")
+nlp = spacy.load("en_core_web_sm")
+
 
 def semantic_similarity(word1, word2):
     """
