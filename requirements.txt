@@ -20,7 +20,7 @@ filelock==3.12.2
 firebase-admin==6.1.0
 flatbuffers==23.5.26
 # fonttools==4.42.0
-fonttools==4.25.0
+# fonttools==4.25.0
 
 fsspec==2023.6.0
 gast==0.4.0
