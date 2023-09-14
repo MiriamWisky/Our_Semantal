@@ -37,8 +37,10 @@ app.use(express.json())
 
 //  app.use(cors());
 const corsOptions = {
-  origin: 'https://senantle.onrender.com',//הכתובת של הדפלוי ברנדר
+  origin: 'https://our-semantal.vercel.app',//הכתובת של הדפלוי ברנדר
+  // https://our-semantal.vercel.app/
   //'https://semantale-57712.web.app' הכתובת של הדפלוי בפיירבייס
+  //'https://senantle.onrender.com' הכתובת של הדפלוי בפיירבייס
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   optionsSuccessStatus: 204, // Some legacy browsers (IE11) choke on 204
 };
