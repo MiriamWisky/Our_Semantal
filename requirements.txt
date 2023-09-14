@@ -69,7 +69,9 @@ packaging==23.1
 pandas==1.3.5
 
 pathy==0.10.2
-Pillow==10.0.0
+# Pillow==10.0.0
+Pillow==8.0.1
+
 pip==23.2.1
 preshed==3.0.8
 proto-plus==1.22.2
