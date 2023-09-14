@@ -58,7 +58,9 @@ matplotlib==3.4.3
 
 msgpack==1.0.5
 murmurhash==1.0.9
-numpy==1.24.3
+# numpy==1.24.3
+numpy==1.21.3
+
 oauthlib==3.2.2
 opt-einsum==3.3.0
 option==2.1.0
