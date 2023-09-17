@@ -1,5 +1,5 @@
 
-import spacy
+# import spacy
 import numpy as np
 
 # Load a pre-trained word embedding model

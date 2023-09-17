@@ -32,11 +32,11 @@ function initRegister(){
 //  const API_URL = 'https://semantale-57712.web.app';// הכתובת של הדפלוי בפיירבייס
  const API_URL = "https://senantle.onrender.com";   //הכתובת של הדפלוי ברנדר
 //  /https://our-semantal.vercel.app
-// 
+// https://senantle.onrender.com
 // Registration function
 async function register(email, password) {
   try {
-    onsole.log("miriam");
+    console.log("miriam");
     const response = await axios.post(`${API_URL}/register`, { email, password } );
 
     const { message } = response.data;
