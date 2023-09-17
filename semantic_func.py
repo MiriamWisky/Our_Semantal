@@ -1,6 +1,6 @@
 
-# import spacy
-# import numpy as np
+import spacy
+import numpy as np
 
 # Load a pre-trained word embedding model
 # nlp = spacy.load("en_core_web_md")
@@ -29,7 +29,7 @@ def semantic_similarity(word1, word2):
     vec2 = nlp(word2).vector
 
     # Calculate cosine similarity
-    similarity = numpy.dot(vec1, vec2) / (numpy.linalg.norm(vec1) * numpy.linalg.norm(vec2))
+    similarity = np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
     
     # Normalize similarity to range between 0 and 1
     normalized_similarity = 0.5 * (similarity + 1)
