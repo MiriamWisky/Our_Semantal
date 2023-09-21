@@ -49,22 +49,16 @@
 
 // module.exports = { calculateSemanticSimilarity };
 
-const { exec } = require('child_process');
+const axios = require('axios');
 
 function calculateSemanticSimilarity(word1, word2) {
-  return new Promise((resolve, reject) => {
-    const pythonProcess = exec('python semantic_func.py', (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-      } else {
-        const similarity = parseFloat(stdout);
-        resolve(similarity);
-      }
-    });
-
-    // Send data to the Python script (if needed)
-    pythonProcess.stdin.write(`${word1}\n${word2}`);
-    pythonProcess.stdin.end();
+  return axios.post('http://your-python-service-url:5000/calculate-semantic-similarity', {
+    word1: word1,
+    word2: word2
+  })
+  .then(response => response.data.similarity)
+  .catch(error => {
+    throw error;
   });
 }
 
