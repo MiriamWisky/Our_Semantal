@@ -76,4 +76,5 @@ def calculate_semantic_similarity():
     return jsonify({'similarity': normalized_similarity})
 
 if __name__ == '__main__':
+    # Update the host and port to match your Render settings
     app.run(host='0.0.0.0', port=5000)

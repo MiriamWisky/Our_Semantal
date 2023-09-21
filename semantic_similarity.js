@@ -52,7 +52,7 @@
 const axios = require('axios');
 
 function calculateSemanticSimilarity(word1, word2) {
-  return axios.post('http://your-python-service-url:5000/calculate-semantic-similarity', {
+  return axios.post('https://senantle.onrender.com/calculate-semantic-similarity', {
     word1: word1,
     word2: word2
   })
