@@ -79,7 +79,7 @@ var details = {
 }
 
 var word="apple";
-const job = schedule.scheduleJob('00 00 * * *', async function () {
+const job = schedule.scheduleJob('4 15 * * *', async function () {
   const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
   yesterday_word=word;
   axios.get(apiUrl)
