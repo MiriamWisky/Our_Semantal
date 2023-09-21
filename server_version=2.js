@@ -86,7 +86,7 @@ const job = schedule.scheduleJob('00 00 * * *', async function () {
     .then(response => {
       const randomWord = response.data[0];
       word=randomWord;
-      // console.log(word)
+       console.log(word)
 
     })
     .catch(error => {
