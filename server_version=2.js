@@ -79,20 +79,60 @@ var details = {
 }
 
 var word="apple";
-const job = schedule.scheduleJob('10 15 * * *', async function () {
-  const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
-  yesterday_word=word;
-  axios.get(apiUrl)
-    .then(response => {
-      const randomWord = response.data[0];
-      word=randomWord;
-       console.log(word)
+// const job = schedule.scheduleJob('10 15 * * *', async function () {
+//   const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
+//   yesterday_word=word;
+//   axios.get(apiUrl)
+//     .then(response => {
+//       const randomWord = response.data[0];
+//       word=randomWord;
+//        console.log(word)
 
-    })
-    .catch(error => {
-      res.status(500).send('Error fetching random word');
-    });
-});
+//     })
+//     .catch(error => {
+//       res.status(500).send('Error fetching random word');
+//     });
+// });
+
+
+// server.js (or your main server file)
+// ...
+
+// Define a function to check and trigger the daily action at midnight
+function checkAndTriggerDailyAction() {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+
+  if (currentHour === 0 && currentMinute === 0) {
+    // Execute the daily action at midnight
+    // Your daily task logic here, e.g., fetching a random word
+    yesterday_word=word;
+    const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
+    axios.get(apiUrl)
+      .then(response => {
+        const randomWord = response.data[0];
+        word=randomWord;
+                console.log(word)
+        // console.log(randomWord);
+      })
+      .catch(error => {
+        console.error('Error performing daily action:', error);
+      });
+  }
+}
+
+// Set up an interval to check and trigger the daily action every minute
+setInterval(checkAndTriggerDailyAction, 60000); // Check every minute
+
+// Define your other routes and server configuration here
+// ...
+
+// ...
+
+
+
+
 app.get('/get', async (req, res) => {
   const res1 = {
     "secretWord":word,
