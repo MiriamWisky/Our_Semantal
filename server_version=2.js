@@ -101,8 +101,13 @@ var word="apple";
 // Define a function to check and trigger the daily action at midnight
 function checkAndTriggerDailyAction() {
   const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
+  const israelTimeOffset = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+  const israelTime = new Date(now.getTime() + israelTimeOffset);
+
+  // Extract the hour and minute in Israel time zone
+  const currentHour = israelTime.getUTCHours();
+  const currentMinute = israelTime.getUTCMinutes();
+
   console.log(currentHour);
   console.log(currentMinute);
   if (currentHour === 0 && currentMinute === 0) {
