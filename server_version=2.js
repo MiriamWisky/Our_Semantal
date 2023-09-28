@@ -103,7 +103,8 @@ function checkAndTriggerDailyAction() {
   const now = new Date();
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
-
+  console.log(currentHour);
+  console.log(currentMinute);
   if (currentHour === 0 && currentMinute === 0) {
     // Execute the daily action at midnight
     // Your daily task logic here, e.g., fetching a random word
