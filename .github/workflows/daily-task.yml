@@ -1,17 +1,25 @@
-name: Daily Task
+name: Daily Action
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Schedule daily at midnight
+    - cron: '35 12 * * *'  # Schedule daily at midnight
 
 jobs:
-  run-daily-task:
+  trigger-daily-action:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run Daily Task
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Trigger Daily Action
         run: |
           curl -X GET https://senantle.onrender.com/daily-action
