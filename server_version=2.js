@@ -95,41 +95,60 @@ var word="apple";
 // });
 
 
+
+
+app.get('/daily-action', async (req, res) => {
+  try {
+    yesterday_word=word;
+    // Your daily task logic here, e.g., fetching a random word
+    const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
+    const response = await axios.get(apiUrl);
+    const randomWord = response.data[0];
+    word=randomWord;
+    // Handle the result as needed
+    console.log(randomWord);
+
+    res.status(200).json({ message: 'Daily action completed' });
+  } catch (error) {
+    console.error('Error performing daily action:', error);
+    res.status(500).json({ message: 'Error performing daily action' });
+  }
+});
 // server.js (or your main server file)
 // ...
 
 // Define a function to check and trigger the daily action at midnight
-function checkAndTriggerDailyAction() {
-  const now = new Date();
-  const israelTimeOffset = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
-  const israelTime = new Date(now.getTime() + israelTimeOffset);
+// function checkAndTriggerDailyAction() {
+//   const now = new Date();
+//   const israelTimeOffset = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+//   const israelTime = new Date(now.getTime() + israelTimeOffset);
 
-  // Extract the hour and minute in Israel time zone
-  const currentHour = israelTime.getUTCHours();
-  const currentMinute = israelTime.getUTCMinutes();
+//   // Extract the hour and minute in Israel time zone
+//   const currentHour = israelTime.getUTCHours();
+//   const currentMinute = israelTime.getUTCMinutes();
 
-  console.log(currentHour);
-  console.log(currentMinute);
-  if (currentHour === 1 && currentMinute === 0) {
-    // Execute the daily action at midnight
-    // Your daily task logic here, e.g., fetching a random word
-    yesterday_word=word;
-    const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
-    axios.get(apiUrl)
-      .then(response => {
-        const randomWord = response.data[0];
-        word=randomWord;
-                console.log(word)
-        // console.log(randomWord);
-      })
-      .catch(error => {
-        console.error('Error performing daily action:', error);
-      });
-  }
-}
+//   console.log(currentHour);
+//   console.log(currentMinute);
+//   if (currentHour === 1 && currentMinute === 0) {
+//     // Execute the daily action at midnight
+//     // Your daily task logic here, e.g., fetching a random word
+//     yesterday_word=word;
+//     const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
+//     axios.get(apiUrl)
+//       .then(response => {
+//         const randomWord = response.data[0];
+//         word=randomWord;
+//                 console.log(word)
+//         // console.log(randomWord);
+//       })
+//       .catch(error => {
+//         console.error('Error performing daily action:', error);
+//       });
+//   }
+// }
 
-// Set up an interval to check and trigger the daily action every minute
-setInterval(checkAndTriggerDailyAction, 60000); // Check every minute
+// // Set up an interval to check and trigger the daily action every minute
+// setInterval(checkAndTriggerDailyAction, 60000); // Check every minute
 
 // Define your other routes and server configuration here
 // ...
