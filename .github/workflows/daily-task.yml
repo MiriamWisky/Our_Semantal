@@ -1,0 +1,17 @@
+name: Daily Task
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Schedule daily at midnight
+
+jobs:
+  run-daily-task:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run Daily Task
+        run: |
+          curl -X GET https://senantle.onrender.com/daily-action
