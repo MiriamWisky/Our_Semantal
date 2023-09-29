@@ -2,7 +2,7 @@ name: Daily Action
 
 on:
   schedule:
-    - cron: '35 12 * * *'  # Schedule daily at midnight
+    - cron: '45 12 * * *'  # Schedule daily at midnight
 
 jobs:
   trigger-daily-action:
