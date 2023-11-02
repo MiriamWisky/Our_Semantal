@@ -211,7 +211,7 @@ app.post('/register', async (req, res) => {
   }
 });
 app.post('/check', async (req, res) => {
-  randRandomWor();
+  // randRandomWor();
   // console.log(process.env.PATH);
 
   console.log(req.body["word"]);
@@ -229,6 +229,7 @@ app.post('/check', async (req, res) => {
     if(exist)
     // console.log(similarity);
     res_similarity=similarity.toFixed(4);
+    console.log(res_similarity);
     const response={
       "similar":res_similarity,
       "exist":exist
