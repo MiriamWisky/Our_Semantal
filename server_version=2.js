@@ -89,9 +89,9 @@ async function randRandomWor() {
   
 
   if (
-    lastTimeRandWord.getFullYear() === currentDate.getFullYear() &&
-    lastTimeRandWord.getMonth() === currentDate.getMonth() &&
-    lastTimeRandWord.getDate() === currentDate.getDate()
+    lastTimeRandWord.getFullYear() !== currentDate.getFullYear() ||
+    lastTimeRandWord.getMonth() !== currentDate.getMonth() ||
+    lastTimeRandWord.getDate() !== currentDate.getDate()
   ) {
   try {
     yesterday_word=currentWord;
