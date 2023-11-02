@@ -104,6 +104,7 @@ async function randRandomWor() {
     console.log(randomWord);
 
     res.status(200).json({ message: 'Daily action completed' });
+    return "hello";
   } catch (error) {
     console.error('Error performing daily action:', error);
     res.status(500).json({ message: 'Error performing daily action' });
@@ -116,14 +117,17 @@ async function randRandomWor() {
 
 
 app.get('/get', async (req, res) => {
-  randRandomWor();
-  const res1 = {
+  randRandomWor().then(()=>{
+     const res1 = {
     "secretWord":currentWord,
     "details" : details , 
     "yesterday_word" : yesterday_word
   }
   console.log( res1["details"]["mail"]);
   res.send(res1);
+ 
+  });
+  
 
 });
 app.post('/saveToFirestore', async (req, res) => {
@@ -219,7 +223,6 @@ app.post('/check', async (req, res) => {
   // console.log(word1, word2)
   
   calculateSemanticSimilarity(word1, word2)
-  
   .then((similarity) => {
     if(exist)
     // console.log(similarity);
