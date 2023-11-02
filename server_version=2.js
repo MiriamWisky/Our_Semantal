@@ -97,7 +97,7 @@ async function randRandomWor() {
     yesterday_word=currentWord;
     // Your daily task logic here, e.g., fetching a random word
     const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
-    const response = await axios.get(apiUrl);
+    const res = await axios.get(apiUrl);
     const randomWord = response.data[0];
     currentWord=randomWord;
     // Handle the result as needed
@@ -126,6 +126,8 @@ app.get('/get', async (req, res) => {
   console.log( res1["details"]["mail"]);
   res.send(res1);
  
+  }).catch((error) => {
+    console.error('Error:', error);
   });
   
 
