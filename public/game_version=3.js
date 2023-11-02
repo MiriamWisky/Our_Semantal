@@ -46,13 +46,12 @@ function init(){
         }
     }, 1000); // Update every second
 
- //-----------------------------------------------------------
 
-    //Updating the database with the required details when the user leaves the game
-    
+
     const dataToSave={} ;
-      window.addEventListener('beforeunload', async () => {
+      window.addEventListener('beforeunload', async (e) => {
         try {
+          e.preventDefault(); // This is necessary to show a custom confirmation dialog
           const lastWinData = null , lastGiveUpData = null;
           if(lastWin != null)
           lastWinData = {
@@ -76,11 +75,50 @@ function init(){
             dataToSave["lastGiveUp"] = lastGiveUpData;
             dataToSave["lastWin"] = lastWinData;
 
-          await axios.post(`${serverBaseUrl}/saveToFirestore`, { dataToSave });
+          await axios.post(`${serverBaseUrl}/saveToFirestore`, { dataToSave }).then((e) => {
+            // The user can now leave the page because the asynchronous operation is complete
+            e.returnValue = '';
+          });
+        
         } catch (error) {
           console.error('Error:', error);
         }
       });
+ //-----------------------------------------------------------
+
+    //Updating the database with the required details when the user leaves the game
+    
+    // const dataToSave={} ;
+    //   window.addEventListener('beforeunload', async () => {
+    //     try {
+    //       const lastWinData = null , lastGiveUpData = null;
+    //       if(lastWin != null)
+    //       lastWinData = {
+    //         year: lastWin.getFullYear(),
+    //         month: lastWin.getMonth(),
+    //         day: lastWin.getDate(),
+    //       };
+    //       if(lastGiveUp != null)
+    //        lastGiveUpData = {
+    //         year: lastGiveUp.getFullYear(),
+    //         month: lastGiveUp.getMonth(),
+    //         day: lastGiveUp.getDate(),
+    //       };
+
+    //         dataToSave["lastWin"] = lastWinData;
+    //         dataToSave["mail"]=email;
+    //         dataToSave["giveUps"]=numberOfGiveUps;
+    //         dataToSave["guesses"]=numberOfGuesses;
+    //         dataToSave["wins"]=numberOfWins;
+    //         dataToSave["totalGames"]=numberOfGames;
+    //         dataToSave["lastGiveUp"] = lastGiveUpData;
+    //         dataToSave["lastWin"] = lastWinData;
+
+    //       await axios.post(`${serverBaseUrl}/saveToFirestore`, { dataToSave });
+    //     } catch (error) {
+    //       console.error('Error:', error);
+    //     }
+    //   });
    
   //-----------------------------------------------------------
 

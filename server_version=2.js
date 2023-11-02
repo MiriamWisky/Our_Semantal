@@ -78,33 +78,28 @@ var details = {
   "lastWin" : null
 }
 
-var word="apple";
-// const job = schedule.scheduleJob('10 15 * * *', async function () {
-//   const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
-//   yesterday_word=word;
-//   axios.get(apiUrl)
-//     .then(response => {
-//       const randomWord = response.data[0];
-//       word=randomWord;
-//        console.log(word)
-
-//     })
-//     .catch(error => {
-//       res.status(500).send('Error fetching random word');
-//     });
-// });
+var currentWord="apple";
+var today = new Date();
+var lastTimeRandWord = new Date(today);
+lastTimeRandWord.setDate(today.getDate() - 1);
 
 
+async function randRandomWor() {
+  var currentDate = new Date();
+  
 
-
-app.get('/daily-action', async (req, res) => {
+  if (
+    lastTimeRandWord.getFullYear() === currentDate.getFullYear() &&
+    lastTimeRandWord.getMonth() === currentDate.getMonth() &&
+    lastTimeRandWord.getDate() === currentDate.getDate()
+  ) {
   try {
-    yesterday_word=word;
+    yesterday_word=currentWord;
     // Your daily task logic here, e.g., fetching a random word
     const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
     const response = await axios.get(apiUrl);
     const randomWord = response.data[0];
-    word=randomWord;
+    currentWord=randomWord;
     // Handle the result as needed
     console.log(randomWord);
 
@@ -113,54 +108,17 @@ app.get('/daily-action', async (req, res) => {
     console.error('Error performing daily action:', error);
     res.status(500).json({ message: 'Error performing daily action' });
   }
-});
-// server.js (or your main server file)
-// ...
 
-// Define a function to check and trigger the daily action at midnight
-// function checkAndTriggerDailyAction() {
-//   const now = new Date();
-//   const israelTimeOffset = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
-//   const israelTime = new Date(now.getTime() + israelTimeOffset);
+  }
 
-//   // Extract the hour and minute in Israel time zone
-//   const currentHour = israelTime.getUTCHours();
-//   const currentMinute = israelTime.getUTCMinutes();
-
-//   console.log(currentHour);
-//   console.log(currentMinute);
-//   if (currentHour === 1 && currentMinute === 0) {
-//     // Execute the daily action at midnight
-//     // Your daily task logic here, e.g., fetching a random word
-//     yesterday_word=word;
-//     const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
-//     axios.get(apiUrl)
-//       .then(response => {
-//         const randomWord = response.data[0];
-//         word=randomWord;
-//                 console.log(word)
-//         // console.log(randomWord);
-//       })
-//       .catch(error => {
-//         console.error('Error performing daily action:', error);
-//       });
-//   }
-// }
-
-// // Set up an interval to check and trigger the daily action every minute
-// setInterval(checkAndTriggerDailyAction, 60000); // Check every minute
-
-// Define your other routes and server configuration here
-// ...
-
-// ...
-
+}
 
 
 
 app.get('/get', async (req, res) => {
+  randRandomWor();
   const res1 = {
-    "secretWord":word,
+    "secretWord":currentWord,
     "details" : details , 
     "yesterday_word" : yesterday_word
   }
@@ -247,7 +205,8 @@ app.post('/register', async (req, res) => {
   }
 });
 app.post('/check', async (req, res) => {
-  console.log(process.env.PATH);
+  randRandomWor();
+  // console.log(process.env.PATH);
 
   console.log(req.body["word"]);
   // let words = checkWord('en');// setup the language for check, default is en
@@ -256,7 +215,7 @@ app.post('/check', async (req, res) => {
    var exist=1;
   var res_similarity=0.0;
   let word1=req.body["word"];
-  let word2=word;
+  let word2=currentWord;
   // console.log(word1, word2)
   
   calculateSemanticSimilarity(word1, word2)
