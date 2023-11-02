@@ -103,11 +103,11 @@ async function randRandomWor() {
     // Handle the result as needed
     console.log(randomWord);
 
-    res.status(200).json({ message: 'Daily action completed' });
+    // res.status(200).json({ message: 'Daily action completed' });
     return "hello";
   } catch (error) {
     console.error('Error performing daily action:', error);
-    res.status(500).json({ message: 'Error performing daily action' });
+    // res.status(500).json({ message: 'Error performing daily action' });
   }
 
   }
