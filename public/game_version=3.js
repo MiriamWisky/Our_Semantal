@@ -48,42 +48,42 @@ function init(){
 
 
 
-    const dataToSave={} ;
-      window.addEventListener('beforeunload', async (e) => {
-        try {
-          e.preventDefault(); // This is necessary to show a custom confirmation dialog
-          const lastWinData = null , lastGiveUpData = null;
-          if(lastWin != null)
-          lastWinData = {
-            year: lastWin.getFullYear(),
-            month: lastWin.getMonth(),
-            day: lastWin.getDate(),
-          };
-          if(lastGiveUp != null)
-           lastGiveUpData = {
-            year: lastGiveUp.getFullYear(),
-            month: lastGiveUp.getMonth(),
-            day: lastGiveUp.getDate(),
-          };
+    // const dataToSave={} ;
+    //   window.addEventListener('beforeunload', async (e) => {
+    //     try {
+    //       e.preventDefault(); // This is necessary to show a custom confirmation dialog
+    //       const lastWinData = null , lastGiveUpData = null;
+    //       if(lastWin != null)
+    //       lastWinData = {
+    //         year: lastWin.getFullYear(),
+    //         month: lastWin.getMonth(),
+    //         day: lastWin.getDate(),
+    //       };
+    //       if(lastGiveUp != null)
+    //        lastGiveUpData = {
+    //         year: lastGiveUp.getFullYear(),
+    //         month: lastGiveUp.getMonth(),
+    //         day: lastGiveUp.getDate(),
+    //       };
 
-            dataToSave["lastWin"] = lastWinData;
-            dataToSave["mail"]=email;
-            dataToSave["giveUps"]=numberOfGiveUps;
-            dataToSave["guesses"]=numberOfGuesses;
-            dataToSave["wins"]=numberOfWins;
-            dataToSave["totalGames"]=numberOfGames;
-            dataToSave["lastGiveUp"] = lastGiveUpData;
-            dataToSave["lastWin"] = lastWinData;
+    //         dataToSave["lastWin"] = lastWinData;
+    //         dataToSave["mail"]=email;
+    //         dataToSave["giveUps"]=numberOfGiveUps;
+    //         dataToSave["guesses"]=numberOfGuesses;
+    //         dataToSave["wins"]=numberOfWins;
+    //         dataToSave["totalGames"]=numberOfGames;
+    //         dataToSave["lastGiveUp"] = lastGiveUpData;
+    //         dataToSave["lastWin"] = lastWinData;
 
-          await axios.post(`${serverBaseUrl}/saveToFirestore`, { dataToSave }).then((e) => {
-            // The user can now leave the page because the asynchronous operation is complete
-            e.returnValue = '';
-          });
+    //       await axios.post(`${serverBaseUrl}/saveToFirestore`, { dataToSave }).then((e) => {
+    //         // The user can now leave the page because the asynchronous operation is complete
+    //         e.returnValue = '';
+    //       });
         
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      });
+    //     } catch (error) {
+    //       console.error('Error:', error);
+    //     }
+    //   });
  //-----------------------------------------------------------
 
     //Updating the database with the required details when the user leaves the game
@@ -121,6 +121,49 @@ function init(){
     //   });
    
   //-----------------------------------------------------------
+
+  const dataToSave = {};
+
+  async function saveDataToFirestore() {
+    try {
+      const lastWinData = lastWin
+        ? {
+            year: lastWin.getFullYear(),
+            month: lastWin.getMonth(),
+            day: lastWin.getDate(),
+          }
+        : null;
+  
+      const lastGiveUpData = lastGiveUp
+        ? {
+            year: lastGiveUp.getFullYear(),
+            month: lastGiveUp.getMonth(),
+            day: lastGiveUp.getDate(),
+          }
+        : null;
+  
+      dataToSave["lastWin"] = lastWinData;
+      dataToSave["mail"] = email;
+      dataToSave["giveUps"] = numberOfGiveUps;
+      dataToSave["guesses"] = numberOfGuesses;
+      dataToSave["wins"] = numberOfWins;
+      dataToSave["totalGames"] = numberOfGames;
+      dataToSave["lastGiveUp"] = lastGiveUpData;
+      dataToSave["lastWin"] = lastWinData;
+  
+      const response = await axios.post(`${serverBaseUrl}/saveToFirestore`, {
+        dataToSave,
+      });
+  
+      // If you need to do something with the response, you can add that logic here
+  
+      return response;
+    } catch (error) {
+      console.error('Error saving data:', error);
+      // You can throw the error or handle it as needed
+    }
+  }
+
 
 //A level 3 user plays with a 10 minute timer
 let remainingTime = 10 * 60; 
@@ -189,6 +232,7 @@ function startTimer() {
                   today.getDate() !== lastGiveUp["day"])
             numberOfGiveUps++;
             lastGiveUp = new Date();
+            saveDataToFirestore();
         }
     });
 
@@ -323,6 +367,7 @@ function startTimer() {
 
             wordInput.value = '';
             serialNumber++;
+            saveDataToFirestore();
         }
     }});
 }
