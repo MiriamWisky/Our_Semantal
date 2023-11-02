@@ -325,6 +325,7 @@ function startTimer() {
                  {
                   numberOfWins++;
                   lastWin = new Date();
+                  saveDataToFirestore();
                 }
                 const overlay = document.getElementById("overlay");
                 const flashingMessage = document.getElementById("flashingMessage");
