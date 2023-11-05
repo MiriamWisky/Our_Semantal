@@ -159,9 +159,13 @@ function startTimer() {
             console.log(lastGiveUp)
             console.log(lastGiveUp["year"]);
               console.log(today)
+              console.log(today.getDate())
+              console.log(today.getMonth())
+              console.log(lastGiveUp["month"])
+
             if(lastGiveUp == null || today.getFullYear() !== lastGiveUp["year"] || today.getMonth() !== lastGiveUp["month"] ||
                   today.getDate() !== lastGiveUp["day"])
-            numberOfGiveUps++;
+                    numberOfGiveUps++;
             lastGiveUp = new Date();
             saveDataToFirestore();
         }
