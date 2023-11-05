@@ -11,7 +11,7 @@ function init(){
 
   const registerButton = document.getElementById('registerButton');
   registerButton.addEventListener('click', () => {
-    window.location.href = 'register.html';
+    window.location.href = '../public/register.html';
   });
 }
 
@@ -33,13 +33,12 @@ function initRegister(){
 // Registration function
 async function register(email, password) {
   try {
-    console.log("miriam");
+    
     const response = await axios.post(`${API_URL}/register`, { email, password } );
-
     const { message } = response.data;
     
     if (message === 'User registered successfully') {
-      window.location.href = '/game.html'; // Redirect to game.html
+      window.location.href = '../public/game.html'; // Redirect to game.html
     }
   } catch (error) {
     if (error.response && error.response.status === 400) {
@@ -62,7 +61,7 @@ async function login(email, password) {
 
     if (message === 'Login successful') {
       // Redirect to the next page 
-      window.location.href = '/game.html'; 
+      window.location.href = '../public/game.html'; 
     }
   } catch (error) {
     if (error.response && error.response.status === 401) {
