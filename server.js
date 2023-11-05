@@ -76,6 +76,7 @@ async function randRandomWord() {
     const randomWord = res.data[0];
     currentWord=randomWord;
     console.log(randomWord);
+    lastTimeRandWord=new Date(today);
     return "";
   
   } catch (error) {
