@@ -151,18 +151,9 @@ function startTimer() {
     giveUp.addEventListener("click", () => {
         const confirmed = confirm("are you sure you want to give up?");
         if (confirmed){
-          //  today = new Date();
             discover=true;
-            give_up=1;
             secretModal.style.display = "block";
             give_up_message.innerHTML=`The secret word is ${secret_word}\n\ncome to play again tomorrow 😊`
-            // console.log(lastGiveUp)
-            // console.log(lastGiveUp["year"]);
-            //   console.log(today)
-            //   console.log(today.getDate())
-            //   console.log(today.getMonth())
-            //   console.log(lastGiveUp["month"])
-
             if(lastGiveUp == null || (today.getFullYear()) !== lastGiveUp["year"] || (today.getMonth()+1) !== lastGiveUp["month"] ||
                   today.getDate() !== lastGiveUp["day"])
                     numberOfGiveUps++;
@@ -193,9 +184,7 @@ function startTimer() {
     get_word()
   .then((w) => {
     word=w;
-    console.log(word);
     secret_word=word["secretWord"];
-    console.log(word["details"]);
     email=word["details"]["mail"];
     numberOfGiveUps = word["details"]["giveUps"];
     numberOfGuesses = word["details"]["guesses"];
