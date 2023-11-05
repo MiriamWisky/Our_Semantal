@@ -156,6 +156,9 @@ function startTimer() {
             give_up=1;
             secretModal.style.display = "block";
             give_up_message.innerHTML=`The secret word is ${secret_word}\n\ncome to play again tomorrow 😊`
+            console.log(lastGiveUp)
+            console.log(lastGiveUp["year"]);
+              console.log(today)
             if(lastGiveUp == null || today.getFullYear() !== lastGiveUp["year"] || today.getMonth() !== lastGiveUp["month"] ||
                   today.getDate() !== lastGiveUp["day"])
             numberOfGiveUps++;
