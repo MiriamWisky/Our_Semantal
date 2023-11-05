@@ -56,7 +56,14 @@ lastTimeRandWord.setDate(today.getDate() - 1);
 //------------------------------------------------------------------
 
 async function randRandomWord() {
-  var currentDate = new Date();
+  var currentDate = new Date(today);
+  console.log(lastTimeRandWord.getFullYear())
+  console.log(currentDate.getFullYear())
+  console.log(lastTimeRandWord.getMonth())
+  console.log(currentDate.getMonth())
+  console.log(lastTimeRandWord.getDate())
+  console.log( currentDate.getDate())
+
   if (
     lastTimeRandWord.getFullYear() !== currentDate.getFullYear() ||
     lastTimeRandWord.getMonth() !== currentDate.getMonth() ||
