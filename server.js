@@ -168,7 +168,15 @@ app.post('/register', async (req, res) => {
       lastGiveUp :  null,
       lastWin : null,
     });
-    
+     details = { 
+      "mail":"",
+      "giveUps" : 0 , 
+      "guesses": 0,
+      "totalGames": 0,
+      "wins":0 ,
+      "lastGiveUp" : null , 
+      "lastWin" : null
+    }
     details["mail"]=email;
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
