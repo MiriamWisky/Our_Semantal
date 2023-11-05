@@ -47,6 +47,11 @@ function init(){
   //--------------------------------------------------------------
 
   const dataToSave = {};
+  var today = new Date();
+  lastWin = new Date(today);
+  lastWin.setDate(today.getDate() - 1);
+  lastGiveUp = new Date(today);
+  lastGiveUp.setDate(today.getDate() - 1);
 
   async function saveDataToFirestore() {
     try {
