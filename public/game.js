@@ -151,7 +151,7 @@ function startTimer() {
     giveUp.addEventListener("click", () => {
         const confirmed = confirm("are you sure you want to give up?");
         if (confirmed){
-          const today = new Date();
+          //  today = new Date();
             discover=true;
             give_up=1;
             secretModal.style.display = "block";
@@ -163,7 +163,7 @@ function startTimer() {
               console.log(today.getMonth())
               console.log(lastGiveUp["month"])
 
-            if(lastGiveUp == null || today.getFullYear() !== lastGiveUp["year"] || today.getMonth() !== lastGiveUp["month"] ||
+            if(lastGiveUp == null || (today.getFullYear()) !== lastGiveUp["year"] || (today.getMonth()+1) !== lastGiveUp["month"] ||
                   today.getDate() !== lastGiveUp["day"])
                     numberOfGiveUps++;
             lastGiveUp = new Date();
