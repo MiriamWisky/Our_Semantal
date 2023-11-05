@@ -153,10 +153,10 @@ app.post('/register', async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: 'Email already exists' });
     }
-
+    console.log("exist"+ existingUser)
     // Hash the password
     const hashedPassword = await hashPassword(password);
-
+    console.log( "email"+email);
     // Add user details to Firestore
     const newUserRef = await admin.firestore().collection('Users').add({
       email,
