@@ -50,7 +50,7 @@ function init(){
 
   async function saveDataToFirestore() {
     try {
-      const lastWinData = lastWin
+      const lastWinData = lastWin instanceof Date
         ? {
             year: lastWin.getFullYear(),
             month: lastWin.getMonth(),
@@ -58,7 +58,7 @@ function init(){
           }
         : null;
   
-      const lastGiveUpData = lastGiveUp
+      const lastGiveUpData = lastGiveUp instanceof Date
         ? {
             year: lastGiveUp.getFullYear(),
             month: lastGiveUp.getMonth(),
