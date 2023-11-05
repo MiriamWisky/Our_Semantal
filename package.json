@@ -2,10 +2,10 @@
   "name": "our_semantal",
   "version": "1.0.0",
   "description": "",
-  "main": "server_version=2.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server_version=2.js"
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",

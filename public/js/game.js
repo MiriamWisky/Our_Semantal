@@ -1,7 +1,6 @@
 var numberOfGames = 0 ,numberOfWins = 0,  numberOfGuesses = 0 ,numberOfGiveUps = 0 , averageGuesses, wins = 0, secret_word="" , lastGiveUp = null , lastWin = null;
-var discover=false, email="";
-var word;
-let serialNumber = 1;
+var discover=false, email="",serialNumber = 1, word;
+
 function init(){
     const addButton = document.getElementById('addButton');
     const wordInput = document.getElementById('wordInput');
@@ -18,13 +17,12 @@ function init(){
     const minutesDisplay = document.getElementById('minutes');
     const secondsDisplay = document.getElementById('seconds');
     const countdownDisplay = document.getElementById('countdown-display');
-    // const serverBaseUrl = process.env.SERVER_BASE_URL || 'https://senantle.onrender.com/'; // Replace with your server's URL
-      // const serverBaseUrl =  'http://localhost:80';
- //-----------------------------------------------------------
-  //  const serverBaseUrl = 'https://semantale-57712.web.app'; // הכתובת של הדפלוי בפיירבייס
-  const serverBaseUrl = 'https://senantle.onrender.com'; //הכתובת של הדפלוי ברנדר
-    //https://senantle.onrender.com 
-    // https://our-semantal.vercel.app
+  
+    const serverBaseUrl = 'https://senantle.onrender.com';
+  
+  
+    //--------------------------------------------------------------
+ 
   // Display the time until the next Semantle
     const countdownInterval = setInterval(() => {
         const now = new Date();
@@ -46,81 +44,7 @@ function init(){
         }
     }, 1000); // Update every second
 
-
-
-    // const dataToSave={} ;
-    //   window.addEventListener('beforeunload', async (e) => {
-    //     try {
-    //       e.preventDefault(); // This is necessary to show a custom confirmation dialog
-    //       const lastWinData = null , lastGiveUpData = null;
-    //       if(lastWin != null)
-    //       lastWinData = {
-    //         year: lastWin.getFullYear(),
-    //         month: lastWin.getMonth(),
-    //         day: lastWin.getDate(),
-    //       };
-    //       if(lastGiveUp != null)
-    //        lastGiveUpData = {
-    //         year: lastGiveUp.getFullYear(),
-    //         month: lastGiveUp.getMonth(),
-    //         day: lastGiveUp.getDate(),
-    //       };
-
-    //         dataToSave["lastWin"] = lastWinData;
-    //         dataToSave["mail"]=email;
-    //         dataToSave["giveUps"]=numberOfGiveUps;
-    //         dataToSave["guesses"]=numberOfGuesses;
-    //         dataToSave["wins"]=numberOfWins;
-    //         dataToSave["totalGames"]=numberOfGames;
-    //         dataToSave["lastGiveUp"] = lastGiveUpData;
-    //         dataToSave["lastWin"] = lastWinData;
-
-    //       await axios.post(`${serverBaseUrl}/saveToFirestore`, { dataToSave }).then((e) => {
-    //         // The user can now leave the page because the asynchronous operation is complete
-    //         e.returnValue = '';
-    //       });
-        
-    //     } catch (error) {
-    //       console.error('Error:', error);
-    //     }
-    //   });
- //-----------------------------------------------------------
-
-    //Updating the database with the required details when the user leaves the game
-    
-    // const dataToSave={} ;
-    //   window.addEventListener('beforeunload', async () => {
-    //     try {
-    //       const lastWinData = null , lastGiveUpData = null;
-    //       if(lastWin != null)
-    //       lastWinData = {
-    //         year: lastWin.getFullYear(),
-    //         month: lastWin.getMonth(),
-    //         day: lastWin.getDate(),
-    //       };
-    //       if(lastGiveUp != null)
-    //        lastGiveUpData = {
-    //         year: lastGiveUp.getFullYear(),
-    //         month: lastGiveUp.getMonth(),
-    //         day: lastGiveUp.getDate(),
-    //       };
-
-    //         dataToSave["lastWin"] = lastWinData;
-    //         dataToSave["mail"]=email;
-    //         dataToSave["giveUps"]=numberOfGiveUps;
-    //         dataToSave["guesses"]=numberOfGuesses;
-    //         dataToSave["wins"]=numberOfWins;
-    //         dataToSave["totalGames"]=numberOfGames;
-    //         dataToSave["lastGiveUp"] = lastGiveUpData;
-    //         dataToSave["lastWin"] = lastWinData;
-
-    //       await axios.post(`${serverBaseUrl}/saveToFirestore`, { dataToSave });
-    //     } catch (error) {
-    //       console.error('Error:', error);
-    //     }
-    //   });
-   
-  //-----------------------------------------------------------
+  //--------------------------------------------------------------
 
   const dataToSave = {};
 
@@ -154,15 +78,15 @@ function init(){
       const response = await axios.post(`${serverBaseUrl}/saveToFirestore`, {
         dataToSave,
       });
-  
-      // If you need to do something with the response, you can add that logic here
-  
+    
       return response;
     } catch (error) {
       console.error('Error saving data:', error);
-      // You can throw the error or handle it as needed
     }
   }
+
+
+//--------------------------------------------------------------
 
 
 //A level 3 user plays with a 10 minute timer
@@ -176,14 +100,13 @@ function updateTimerDisplay() {
   minutesDisplay.textContent = minutes;
   secondsDisplay.textContent = seconds < 10 ? '0' + seconds : seconds;
 }
+
 function startTimer() {
   timerInterval = setInterval(() => {
     remainingTime--;
     updateTimerDisplay();
-
     const progressPercentage = (1 - remainingTime / (10 * 60)) * 100;
-
-     timerProgress.style.width = progressPercentage + '%';
+    timerProgress.style.width = progressPercentage + '%';
 
     if (remainingTime <= 0) {
       clearInterval(timerInterval);
@@ -270,9 +193,8 @@ function startTimer() {
     lastWin = word["details"]["lastWin"];
     averageGuesses = numberOfGuesses / numberOfGames;
     yesterday_w.innerText=`yesterday's word was:${word["yesterday_word"]}`
-    // numberOfWins=100
+  
      if(numberOfWins>=100){
-
         startTimer();
         timerContainer.style.display = 'block';
      }
@@ -285,7 +207,6 @@ function startTimer() {
   
 // Adding the word to the table sorted by semantic distance
     addButton.addEventListener('click', async () => {
-        
         const newWord = wordInput.value.trim();
         if (newWord !== '') {
             const existingWords = Array.from(document.querySelectorAll('#wordList td:nth-child(2)')).map(cell => cell.textContent);

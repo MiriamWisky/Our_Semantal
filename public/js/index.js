@@ -8,14 +8,13 @@ function init(){
     const password = formData.get('password');
     await login(email, password);
   });
-////////////
+
   const registerButton = document.getElementById('registerButton');
   registerButton.addEventListener('click', () => {
     window.location.href = 'register.html';
   });
-
- 
 }
+
 function initRegister(){
   const registerForm = document.getElementById('registerForm');
   registerForm.addEventListener('submit', async (event) => {
@@ -28,11 +27,9 @@ function initRegister(){
   });
 }
 
-//  const API_URL = 'http://localhost:80'; 
-//  const API_URL = 'https://semantale-57712.web.app';// הכתובת של הדפלוי בפיירבייס
- const API_URL = "https://senantle.onrender.com";   //הכתובת של הדפלוי ברנדר
-//  /https://our-semantal.vercel.app
-// https://senantle.onrender.com
+
+ const API_URL = "https://senantle.onrender.com";   
+
 // Registration function
 async function register(email, password) {
   try {
@@ -42,7 +39,7 @@ async function register(email, password) {
     const { message } = response.data;
     
     if (message === 'User registered successfully') {
-      window.location.href = '/dashboard.html'; // Redirect to dashboard.html
+      window.location.href = '/game.html'; // Redirect to game.html
     }
   } catch (error) {
     if (error.response && error.response.status === 400) {
@@ -57,17 +54,15 @@ async function register(email, password) {
 // Login function
 async function login(email, password) {
   try {
-    console.log("miriam");
     const response = await axios.post(`${API_URL}/login`, { email, password });
 
     console.log("message  " + response.data);
-    // Update the wins count for the logged-in user
-    // const winsCount = userDetails.wins;
+
     const { message, userDetails } = response.data;
 
     if (message === 'Login successful') {
-      // Redirect to the next page (e.g., dashboard.html)
-      window.location.href = '/dashboard.html'; // Modify the URL as needed
+      // Redirect to the next page 
+      window.location.href = '/game.html'; 
     }
   } catch (error) {
     if (error.response && error.response.status === 401) {

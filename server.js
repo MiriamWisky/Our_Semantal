@@ -1,4 +1,4 @@
-// 
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const admin = require('firebase-admin');
@@ -8,47 +8,22 @@ const schedule = require('node-schedule');
 const axios = require('axios').default;
 const https = require('https');
 var checkWord=require('check-if-word') ;
-// const winston = require('winston');
-const path = require('path');
-require('dotenv').config();
-// const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-const { exec } = require('child_process');
-const { calculateSemanticSimilarity } = require('./semantic_similarity');
-// const functions = require('firebase-functions');
-const app = express();
 
+//------------------------------------------------------------------
+
+require('dotenv').config();
+const { calculateSemanticSimilarity } = require('./semantic_similarity');
+const app = express();
 
 app.use(express.json())
 
-
-
-
-// ////////////
-// const corsOptions = {
-//   origin: 'https://semantale-57712.web.app', // Replace with your Firebase Hosting URL
-//   methods: 'GET,POST',
-//   allowedHeaders: 'Content-Type', // Add other required headers
-//   optionsSuccessStatus: 204, // Set this status for preflight requests
-// };
-
-// app.use(cors(corsOptions));
-
-
-
-//  app.use(cors());
 const corsOptions = {
-  origin: 'https://senantle.onrender.com',//הכתובת של הדפלוי ברנדר
-  // https://our-semantal.vercel.app/
-  //'https://semantale-57712.web.app' הכתובת של הדפלוי בפיירבייס
-  //'https://senantle.onrender.com' הכתובת של הדפלוי בפיירבייס
+  origin: 'https://senantle.onrender.com',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   optionsSuccessStatus: 204, // Some legacy browsers (IE11) choke on 204
 };
 
 app.use(cors(corsOptions));
-
-
-////////////////////////////
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
@@ -57,17 +32,13 @@ app.use(express.static('public'));
 const serviceAccount = require('./firebase-admin-SDK.json');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  // ...
-});
-
-const userWins = {}; 
+}); 
 
 const scheduleRule = new schedule.RecurrenceRule();
 scheduleRule.hour = 10;
 scheduleRule.minute = 58;
 scheduleRule.second = 0;
-var yesterday_word="flower";
-
+var yesterday_word="";
 var details = { 
   "mail":"",
   "giveUps" : 0 , 
@@ -77,17 +48,15 @@ var details = {
   "lastGiveUp" : null , 
   "lastWin" : null
 }
-
 var currentWord="apple";
 var today = new Date();
 var lastTimeRandWord = new Date(today);
 lastTimeRandWord.setDate(today.getDate() - 1);
 
+//------------------------------------------------------------------
 
-async function randRandomWor() {
+async function randRandomWord() {
   var currentDate = new Date();
-  
-
   if (
     lastTimeRandWord.getFullYear() !== currentDate.getFullYear() ||
     lastTimeRandWord.getMonth() !== currentDate.getMonth() ||
@@ -95,29 +64,21 @@ async function randRandomWor() {
   ) {
   try {
     yesterday_word=currentWord;
-    // Your daily task logic here, e.g., fetching a random word
     const apiUrl = 'https://random-word-api.vercel.app/api?words=1';
     const res = await axios.get(apiUrl);
     const randomWord = res.data[0];
     currentWord=randomWord;
-    // Handle the result as needed
     console.log(randomWord);
-
-    // res.status(200).json({ message: 'Daily action completed' });
-    return "hello";
+    return "";
+  
   } catch (error) {
     console.error('Error performing daily action:', error);
-    // res.status(500).json({ message: 'Error performing daily action' });
-  }
+  }}}
 
-  }
-
-}
-
-
+//------------------------------------------------------------------
 
 app.get('/get', async (req, res) => {
-  randRandomWor().then(()=>{
+  randRandomWord().then(()=>{
      const res1 = {
     "secretWord":currentWord,
     "details" : details , 
@@ -129,14 +90,13 @@ app.get('/get', async (req, res) => {
   }).catch((error) => {
     console.error('Error:', error);
   });
-  
-
 });
+
+//------------------------------------------------------------------
+
 app.post('/saveToFirestore', async (req, res) => {
   try {
-    var  mail, giveUps, guesses, wins, totalGames , lastGiveUp , lastWin  ;//= req.body; // Destructure data
-    // console.log( mail, giveUps, guesses, wins, totalGames);
-    // console.log(req.body);
+    var  mail, giveUps, guesses, wins, totalGames , lastGiveUp , lastWin  ;
     mail=req.body.dataToSave["mail"];
     giveUps=req.body.dataToSave["giveUps"]
     guesses=req.body.dataToSave["guesses"]
@@ -149,7 +109,6 @@ app.post('/saveToFirestore', async (req, res) => {
 
     // Query for the user by email
     const querySnapshot = await usersCollection.where('email', '==', mail).get();
-
     if (querySnapshot.empty) {
       return res.status(404).json({ message: 'User not found.' });
     }
@@ -168,13 +127,13 @@ app.post('/saveToFirestore', async (req, res) => {
     });
 
     await Promise.all(updatePromises);
-
     res.status(200).json({ message: 'User attributes updated.' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred.' });
-  }
-});
+  }});
+
+//------------------------------------------------------------------
 
 // Define routes
 app.post('/register', async (req, res) => {
@@ -186,7 +145,6 @@ app.post('/register', async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: 'Email already exists' });
     }
-    
 
     // Hash the password
     const hashedPassword = await hashPassword(password);
@@ -202,7 +160,7 @@ app.post('/register', async (req, res) => {
       lastGiveUp :  null,
       lastWin : null,
     });
-    // userWins[userRecord.uid] = 0;
+    
     details["mail"]=email;
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
@@ -210,24 +168,22 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Error registering user' });
   }
 });
-app.post('/check', async (req, res) => {
-  // randRandomWor();
-  // console.log(process.env.PATH);
 
+//------------------------------------------------------------------
+
+app.post('/check', async (req, res) => {
+  randRandomWord().then(()=>{
   console.log(req.body["word"]);
-  // let words = checkWord('en');// setup the language for check, default is en
+  // let words = checkWord('en');
   // var exist=words.check(req.body["word"]);
   // console.log(exist);
-   var exist=1;
+  var exist=1;
   var res_similarity=0.0;
   let word1=req.body["word"];
   let word2=currentWord;
-  // console.log(word1, word2)
-  
   calculateSemanticSimilarity(word1, word2)
   .then((similarity) => {
     if(exist)
-    // console.log(similarity);
     res_similarity=similarity.toFixed(4);
     console.log(res_similarity);
     const response={
@@ -239,13 +195,17 @@ app.post('/check', async (req, res) => {
   .catch((error) => {
     console.error('Error calculating semantic similarity:', error);
   });
+}).catch((error) => {
+  console.error('Error:', error);
 });
+});
+
+//------------------------------------------------------------------
 
 app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await getUserByEmail(email);
-    // console.log(user)
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -255,22 +215,22 @@ app.post('/login', async (req, res) => {
     if (!isAuthenticated) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    // console.log("the userrrrr" + user.lastWin)
     details["mail"]=email;
+    details["giveUps"] = user.giveUps;
+    details["guesses"] = user.guesses;
+    details["totalGames"] = user.totalGames;
+    details["wins"] = user.wins;
+    details["lastGiveUp"] = user.lastGiveUp;
+    details["lastWin"] = user.lastWin;
 
-         details["giveUps"] = user.giveUps;
-        details["guesses"] = user.guesses;
-        details["totalGames"] = user.totalGames;
-        details["wins"] = user.wins;
-        details["lastGiveUp"] = user.lastGiveUp;
-        details["lastWin"] = user.lastWin;
-console.log(details["mail"]);
+    console.log(details["mail"]);
     res.status(200).json({ message: 'Login successful', uid: user.uid, userDetails: user });
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(401).json({ message: 'Invalid credentials' });
-  }
-});
+  }});
+
+  //------------------------------------------------------------------
 
 async function getUserByEmail(email) {
   const snapshot = await admin.firestore().collection('Users').where('email', '==', email).limit(1).get();
@@ -281,15 +241,20 @@ async function getUserByEmail(email) {
   return { uid: userDoc.id, ...userDoc.data() };
 }
 
+//------------------------------------------------------------------
+
 async function hashPassword(password) {
   const saltRounds = 10;
   return bcrypt.hash(password, saltRounds);
 }
+
+//------------------------------------------------------------------
+
  const port = process.env.PORT || 8080;
-// const port = 443;
+
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
-// exports.app = functions.https.onRequest(app);
+
 
 

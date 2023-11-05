@@ -1,56 +1,7 @@
-// const { exec } = require('child_process');
-
-// function calculateSemanticSimilarity(word1, word2) {
-//   return new Promise((resolve, reject) => {
-//     const command = `python -c "import semantic_func; print(semantic_func.semantic_similarity('${word1}', '${word2}'))"`;
-
-//     exec(command, (error, stdout, stderr) => {
-//      if (error) {
-//         reject(error);
-//       } else {
-//         const similarity = parseFloat(stdout);
-//         resolve(similarity);
-//       }
-//     });
-//   });
-// }
-// module.exports = { calculateSemanticSimilarity };
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const { exec } = require('child_process');
-
-// function calculateSemanticSimilarity(word1, word2) {
-//   return new Promise((resolve, reject) => {
-//     const pythonPath = 'C:\Users\Miriam\AppData\Local\Programs\Python\Python311\python.exe';
-    
-//     const command = `${pythonPath} -c "import semantic_func; print(semantic_func.semantic_similarity('${word1}', '${word2}'))"`;
-
-//     exec(command, (error, stdout, stderr) => {
-//       if (error) {
-//         reject(error);
-//       } else {
-//         const similarity = parseFloat(stdout);
-//         resolve(similarity);
-//       }
-//     });
-//   });
-// }
-
-// module.exports = { calculateSemanticSimilarity };
 
 const axios = require('axios');
 
+//This  function  accesses a server that receives 2 words and returns their semantic distance
 function calculateSemanticSimilarity(word1, word2) {
   return axios.post('https://python-server-gkw3.onrender.com/calculate-semantic-similarity', {
     word1: word1,
