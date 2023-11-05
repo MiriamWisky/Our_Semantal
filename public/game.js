@@ -1,4 +1,4 @@
-var numberOfGames = 0 ,numberOfWins = 0,  numberOfGuesses = 0 ,numberOfGiveUps = 0 , averageGuesses, wins = 0, secret_word="" , lastGiveUp = null , lastWin = null;
+var numberOfGames = 0 ,numberOfWins = 0,  numberOfGuesses = 0 ,numberOfGiveUps = 0 , averageGuesses, wins = 0, secret_word="" , lastGiveUp  , lastWin ;
 var discover=false, email="",serialNumber = 1, word;
 
 function init(){
@@ -156,12 +156,12 @@ function startTimer() {
             give_up=1;
             secretModal.style.display = "block";
             give_up_message.innerHTML=`The secret word is ${secret_word}\n\ncome to play again tomorrow 😊`
-            console.log(lastGiveUp)
-            console.log(lastGiveUp["year"]);
-              console.log(today)
-              console.log(today.getDate())
-              console.log(today.getMonth())
-              console.log(lastGiveUp["month"])
+            // console.log(lastGiveUp)
+            // console.log(lastGiveUp["year"]);
+            //   console.log(today)
+            //   console.log(today.getDate())
+            //   console.log(today.getMonth())
+            //   console.log(lastGiveUp["month"])
 
             if(lastGiveUp == null || (today.getFullYear()) !== lastGiveUp["year"] || (today.getMonth()+1) !== lastGiveUp["month"] ||
                   today.getDate() !== lastGiveUp["day"])
