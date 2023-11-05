@@ -54,7 +54,7 @@ var lastTimeRandWord = new Date(today);
 lastTimeRandWord.setDate(today.getDate() - 1);
 
 //------------------------------------------------------------------
-
+//Draw a word if a word has not yet been drawn today
 async function randRandomWord() {
   var currentDate = new Date(today);
   console.log(lastTimeRandWord.getFullYear())
@@ -84,7 +84,7 @@ async function randRandomWord() {
   }}}
 
 //------------------------------------------------------------------
-
+//Getting all the details required for the game, such as yesterday's word, etc
 app.get('/get', async (req, res) => {
   randRandomWord().then(()=>{
      const res1 = {
@@ -101,7 +101,7 @@ app.get('/get', async (req, res) => {
 });
 
 //------------------------------------------------------------------
-
+//Updating new details in the database
 app.post('/saveToFirestore', async (req, res) => {
   try {
     var  mail, giveUps, guesses, wins, totalGames , lastGiveUp , lastWin  ;
@@ -143,7 +143,7 @@ app.post('/saveToFirestore', async (req, res) => {
 
 //------------------------------------------------------------------
 
-// Define routes
+// Entering a new user into the system and checking if he already exists
 app.post('/register', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -187,12 +187,18 @@ app.post('/register', async (req, res) => {
 
 //------------------------------------------------------------------
 
+//Checking whether the word exists in the language, as well as obtaining the semantic distance
+// of the word and the secret word by contacting the appropriate server
 app.post('/check', async (req, res) => {
   randRandomWord().then(()=>{
   console.log(req.body["word"]);
+  //nother test we conducted is: testing whether the word exists in the language,
+  // but the test takes a long time, so we rejected it, this is the code:
+
   // let words = checkWord('en');
   // var exist=words.check(req.body["word"]);
   // console.log(exist);
+  
   var exist=1;
   var res_similarity=0.0;
   let word1=req.body["word"];
@@ -217,6 +223,7 @@ app.post('/check', async (req, res) => {
 });
 
 //------------------------------------------------------------------
+//Entering an existing user into the system, and getting his details from the database
 
 app.post('/login', async (req, res) => {
   try {
@@ -246,8 +253,8 @@ app.post('/login', async (req, res) => {
     res.status(401).json({ message: 'Invalid credentials' });
   }});
 
-  //------------------------------------------------------------------
-
+//------------------------------------------------------------------
+//Receiving the user's information from the database, according to the email entered
 async function getUserByEmail(email) {
   const snapshot = await admin.firestore().collection('Users').where('email', '==', email).limit(1).get();
   if (snapshot.empty) {
@@ -258,6 +265,7 @@ async function getUserByEmail(email) {
 }
 
 //------------------------------------------------------------------
+//Encrypting the password for saving in the database
 
 async function hashPassword(password) {
   const saltRounds = 10;
