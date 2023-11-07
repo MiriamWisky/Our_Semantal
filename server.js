@@ -48,7 +48,7 @@ var details = {
   "lastGiveUp" : null , 
   "lastWin" : null
 }
-var currentWord="apple";
+var currentWord="prognosis";
 var today = new Date();
 var lastTimeRandWord = new Date(today);
 lastTimeRandWord.setDate(today.getDate() - 1);
