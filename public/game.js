@@ -1,5 +1,5 @@
 var numberOfGames = 0 ,numberOfWins = 0,  numberOfGuesses = 0 ,numberOfGiveUps = 0 , averageGuesses, wins = 0, secret_word="" , lastGiveUp  , lastWin ;
-var discover=false, email="",serialNumber = 1, word;
+var email="",serialNumber = 1, word;
 
 function init(){
     const addButton = document.getElementById('addButton');
@@ -151,12 +151,13 @@ function startTimer() {
     giveUp.addEventListener("click", () => {
         const confirmed = confirm("are you sure you want to give up?");
         if (confirmed){
-            discover=true;
+            
             secretModal.style.display = "block";
             give_up_message.innerHTML=`The secret word is ${secret_word}\n\ncome to play again tomorrow 😊`
-            if(lastGiveUp == null || (today.getFullYear()) !== lastGiveUp["year"] || (today.getMonth()+1) !== lastGiveUp["month"] ||
-                  today.getDate() !== lastGiveUp["day"])
+            if(discover==false&&(lastGiveUp == null || (today.getFullYear()) !== lastGiveUp["year"] || (today.getMonth()+1) !== lastGiveUp["month"] ||
+                  today.getDate() !== lastGiveUp["day"]))
                     numberOfGiveUps++;
+            discover=true;
             lastGiveUp = new Date();
             saveDataToFirestore();
         }
@@ -241,14 +242,15 @@ function startTimer() {
             if(response.data["similar"] == 1){
               const today = new Date();
               
-                discover=true;
-                if(lastWin == null || today.getFullYear() !== lastWin["year"] || today.getMonth() !== lastWin["month"] ||
-                  today.getDate() !== lastWin["day"])
+                
+                if(discover==false&&(lastWin == null || today.getFullYear() !== lastWin["year"] || today.getMonth() !== lastWin["month"] ||
+                  today.getDate() !== lastWin["day"]))
                  {
                   numberOfWins++;
                   lastWin = new Date();
                   saveDataToFirestore();
                 }
+                discover=true;
                 const overlay = document.getElementById("overlay");
                 const flashingMessage = document.getElementById("flashingMessage");
             
