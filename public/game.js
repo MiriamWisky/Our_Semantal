@@ -131,7 +131,7 @@ function startTimer() {
         var level=1;
         if(numberOfWins>=50)
          level=2
-         else if(numberOfWins>=100)
+        if(numberOfWins>=100)
          level=3;
         const statsText = `                   Overall Statistics
             
